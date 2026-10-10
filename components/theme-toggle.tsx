@@ -1,33 +1,82 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Button } from "./ui/button";
-
 export default function ThemeToggle() {
-    const { setTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
+                <button
+                    type="button"
+                    aria-label="Change appearance"
+                    title="Appearance"
+                    className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:bg-secondary hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                    <Sun
+                        aria-hidden="true"
+                        className="size-4.5 dark:hidden"
+                        strokeWidth={1.6}
+                    />
+                    <Moon
+                        aria-hidden="true"
+                        className="hidden size-4.5 dark:block"
+                        strokeWidth={1.6}
+                    />
+                </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+
+            <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-48 rounded-xl p-1.5"
+            >
+                <DropdownMenuRadioGroup
+                    value={mounted ? theme : undefined}
+                    onValueChange={setTheme}
+                >
+                    <DropdownMenuRadioItem
+                        value="light"
+                        className="rounded-lg py-2.5 text-[0.825rem]"
+                    >
+                        <Sun className="size-4" strokeWidth={1.7} />
+                        Light
+                    </DropdownMenuRadioItem>
+
+                    <DropdownMenuRadioItem
+                        value="dark"
+                        className="rounded-lg py-2.5 text-[0.825rem]"
+                    >
+                        <Moon className="size-4" strokeWidth={1.7} />
+                        Dark
+                    </DropdownMenuRadioItem>
+
+                    <DropdownMenuRadioItem
+                        value="system"
+                        className="rounded-lg py-2.5 text-[0.825rem]"
+                    >
+                        <Monitor className="size-4" strokeWidth={1.7} />
+                        System
+                    </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
     );
