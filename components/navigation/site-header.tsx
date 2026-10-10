@@ -4,10 +4,18 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import ThemeToggle from "@/components/theme-toggle";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group";
 import { authServer } from "@/lib/auth/server";
 
-import { AccountMenu, DesktopNavigation, MobileNavigation } from "./site-header-client";
+import {
+    AccountMenu,
+    DesktopNavigation,
+    MobileNavigation,
+} from "./site-header-client";
 
 export default function SiteHeader() {
     return (
@@ -33,7 +41,7 @@ export default function SiteHeader() {
                 <div className="flex-1" />
 
                 <form role="search" action="/search">
-                    <InputGroup className="hidden h-10 w-[clamp(13rem,20vw,18rem)] xl:flex">
+                    <InputGroup className="hidden h-8 w-[clamp(13rem,20vw,18rem)] xl:flex">
                         <InputGroupInput
                             type="search"
                             name="q"
@@ -42,7 +50,10 @@ export default function SiteHeader() {
                             className="h-full"
                         />
                         <InputGroupAddon>
-                            <Search aria-hidden="true" className="size-4 text-muted-foreground" />
+                            <Search
+                                aria-hidden="true"
+                                className="size-4 text-muted-foreground"
+                            />
                         </InputGroupAddon>
                     </InputGroup>
                 </form>
@@ -71,14 +82,16 @@ async function HeaderAccount() {
     });
 
     if (session?.user) {
-        return <AccountMenu name={session.user.name} email={session.user.email} />;
+        return (
+            <AccountMenu name={session.user.name} email={session.user.email} />
+        );
     }
 
     return (
         <>
             <Link
                 href="/auth/login"
-                className="hidden h-10 items-center rounded-lg px-3.5 text-[0.825rem] font-medium text-foreground transition-colors hover:bg-secondary sm:inline-flex"
+                className="hidden h-8 items-center rounded-lg px-3.5 text-[0.825rem] font-medium text-foreground transition-colors hover:bg-secondary sm:inline-flex"
             >
                 Log in
             </Link>
