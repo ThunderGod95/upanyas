@@ -1,8 +1,8 @@
 import "server-only";
-
-import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { betterAuth } from "better-auth/minimal";
 import { username } from "better-auth/plugins";
+
 import { prisma } from "@/lib/prisma";
 
 export const authServer = betterAuth({
