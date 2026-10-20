@@ -33,7 +33,7 @@ export default function SiteHeader() {
                     aria-label="NovelUpdates home"
                     className="shrink-0 font-heading text-[2rem] leading-none tracking-[-0.07em] text-foreground"
                 >
-                    NU<span className="text-ornament">.</span>
+                    Upanyas<span className="text-ornament">.</span>
                 </Link>
 
                 <DesktopNavigation />

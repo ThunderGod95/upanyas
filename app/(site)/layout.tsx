@@ -1,13 +1,15 @@
 import SiteHeader from "@/components/navigation/site-header";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <>
             <SiteHeader />
 
-            <main id="main-content" className="min-h-[calc(100dvh-4.5rem)]">
-                {children}
-            </main>
+            <main id="main-content">{children}</main>
         </>
     );
 }
