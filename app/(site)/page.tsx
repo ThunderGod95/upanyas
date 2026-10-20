@@ -1,3 +1,9 @@
+import FeaturedNovels from "@/components/home/featured-novels";
+
 export default function Home() {
-    return <div className="max-w-7xl"></div>;
+    return (
+        <>
+            <FeaturedNovels novels={[]} />
+        </>
+    );
 }
