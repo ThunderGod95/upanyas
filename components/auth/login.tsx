@@ -52,8 +52,7 @@ export default function LoginForm() {
 
             if (error) {
                 form.setError("root", {
-                    message:
-                        error.message ?? "Unable to log in. Please try again.",
+                    message: error.message ?? "Unable to log in. Please try again.",
                 });
                 return;
             }
@@ -68,17 +67,13 @@ export default function LoginForm() {
     };
 
     return (
-        <form
-            id="login-form"
-            className="auth-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-        >
+        <form id="login-form" className="auth-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
                 <FieldSet>
                     <FieldLegend>Log in</FieldLegend>
                     <FieldDescription>
-                        Welcome back! Log in to track your reading progress,
-                        manage your reading lists, and discover new novels.
+                        Welcome back! Log in to track your reading progress, manage your reading
+                        lists, and discover new novels.
                     </FieldDescription>
 
                     <FieldGroup>
@@ -87,9 +82,7 @@ export default function LoginForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>
-                                        Username
-                                    </FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>Username</FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
@@ -99,9 +92,7 @@ export default function LoginForm() {
                                         disabled={isSubmitting}
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError
-                                            errors={[fieldState.error]}
-                                        />
+                                        <FieldError errors={[fieldState.error]} />
                                     )}
                                 </Field>
                             )}
@@ -112,9 +103,7 @@ export default function LoginForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>
-                                        Password
-                                    </FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
@@ -125,9 +114,7 @@ export default function LoginForm() {
                                         disabled={isSubmitting}
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError
-                                            errors={[fieldState.error]}
-                                        />
+                                        <FieldError errors={[fieldState.error]} />
                                     )}
                                 </Field>
                             )}
@@ -149,10 +136,7 @@ export default function LoginForm() {
                                         ref={field.ref}
                                         disabled={isSubmitting}
                                     />
-                                    <FieldLabel
-                                        htmlFor={field.name}
-                                        className="font-normal"
-                                    >
+                                    <FieldLabel htmlFor={field.name} className="font-normal">
                                         Remember me
                                     </FieldLabel>
                                 </Field>
@@ -161,24 +145,15 @@ export default function LoginForm() {
                     </FieldGroup>
                 </FieldSet>
 
-                {errors.root && (
-                    <FieldError role="alert">{errors.root.message}</FieldError>
-                )}
+                {errors.root && <FieldError role="alert">{errors.root.message}</FieldError>}
 
-                <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full"
-                >
+                <Button type="submit" disabled={isSubmitting} className="w-full">
                     {isSubmitting ? "Logging in..." : "Log in"}
                 </Button>
 
                 <p className="text-center text-sm text-muted-foreground">
                     Don't have an account?{" "}
-                    <Link
-                        href="/auth/signup"
-                        className="font-medium text-primary hover:underline"
-                    >
+                    <Link href="/auth/signup" className="font-medium text-primary hover:underline">
                         Sign up
                     </Link>
                 </p>

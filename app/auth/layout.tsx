@@ -17,10 +17,7 @@ export default async function AuthLayout({ children }: LayoutProps<"/auth">) {
 
     return (
         <div className="auth-shell relative isolate min-h-dvh overflow-hidden">
-            <div
-                aria-hidden="true"
-                className="auth-art absolute inset-0 hidden lg:block"
-            />
+            <div aria-hidden="true" className="auth-art absolute inset-0 hidden lg:block" />
 
             <div className="auth-panel relative z-10 flex min-h-dvh w-full items-center px-6 py-24 sm:px-12 lg:w-[60%] lg:pr-32 lg:pl-[clamp(3.5rem,9vw,10rem)]">
                 <div className="w-full max-w-105">

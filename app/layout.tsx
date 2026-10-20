@@ -32,11 +32,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             suppressHydrationWarning
         >
             <body>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                >
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                     {children}
                 </ThemeProvider>
             </body>
