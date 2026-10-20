@@ -19,8 +19,9 @@ const displayFont = Newsreader({
 });
 
 export const metadata: Metadata = {
-    title: "NU",
-    description: "A NovelUpdates clone.",
+    title: "Upanyas",
+    description:
+        "Read light novel, web novel, korean novel and chinese novel online for free. You can find hundreds of english translated light novel, web novel, korean novel and chinese novel which are daily updated!",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,7 +32,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             suppressHydrationWarning
         >
             <body>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                >
                     {children}
                 </ThemeProvider>
             </body>

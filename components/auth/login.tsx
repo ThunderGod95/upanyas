@@ -75,7 +75,7 @@ export default function LoginForm() {
         >
             <FieldGroup>
                 <FieldSet>
-                    <FieldLegend className="text-base!">Log in</FieldLegend>
+                    <FieldLegend>Log in</FieldLegend>
                     <FieldDescription>
                         Welcome back! Log in to track your reading progress,
                         manage your reading lists, and discover new novels.
