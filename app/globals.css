@@ -57,7 +57,8 @@
     --ornament: #8a6948;
     --selection: #e8cdd5;
 
-    --surface-shadow: 0 1px 2px rgb(33 22 29 / 0.025), 0 12px 36px rgb(33 22 29 / 0.045);
+    --surface-shadow:
+        0 1px 2px rgb(33 22 29 / 0.025), 0 12px 36px rgb(33 22 29 / 0.045);
 }
 
 /* ---------------------------------------
@@ -332,7 +333,7 @@
 
     .auth-form [data-slot="field-legend"] {
         font-family: var(--font-display), Georgia, serif;
-        font-size: clamp(2.4rem, 4vw, 3rem);
+        font-size: clamp(2.4rem, 4vw, 3rem) !important;
         font-weight: 400;
         letter-spacing: -0.045em;
         line-height: 1.1;
@@ -340,7 +341,7 @@
 
     .auth-form [data-slot="field-description"] {
         color: var(--muted-foreground);
-        font-size: 0.875rem;
+        font-size: 0.875rem !important;
         line-height: 1.65;
     }
 
@@ -373,7 +374,7 @@
         background: var(--card);
         border-color: var(--input);
         border-radius: var(--radius-md);
-        font-size: 0.9rem;
+        font-size: 0.9rem !important;
         box-shadow: none;
     }
 
@@ -384,7 +385,7 @@
     .auth-form [data-slot="button"] {
         height: var(--control-height);
         border-radius: var(--radius-md);
-        font-size: 0.875rem;
+        font-size: 0.875rem !important;
         font-weight: 600;
         letter-spacing: 0.005em;
         transition:
@@ -404,7 +405,7 @@
     }
 
     .auth-form [data-slot="field-error"] {
-        font-size: 0.8rem;
+        font-size: 0.8rem !important;
     }
 
     @media (min-width: 64rem) {
