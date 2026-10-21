@@ -92,6 +92,8 @@ model Series {
   genres Genre[]
   tags   Tag[]
 
+  featured FeaturedSeries?
+
   @@index([createdAt])
   @@map("series")
 }
@@ -167,4 +169,15 @@ model Tag {
   series Series[]
 
   @@map("tag")
+}
+
+model FeaturedSeries {
+  seriesId  String   @id
+  position  Int
+  createdAt DateTime @default(now())
+
+  series Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  @@index([position])
+  @@map("featured_series")
 }
