@@ -1,13 +1,20 @@
 import { LogIn, Search } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 
 import ThemeToggle from "@/components/theme-toggle";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { authServer } from "@/lib/auth/server";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group";
 
-import { AccountMenu, DesktopNavigation, MobileNavigation } from "./site-header-client";
+import {
+    AccountMenu,
+    DesktopNavigation,
+    MobileNavigation,
+} from "./site-header-client";
+import { getSession } from "@/lib/auth/server/utils";
 
 export default function SiteHeader() {
     return (
@@ -42,7 +49,10 @@ export default function SiteHeader() {
                             className="h-full"
                         />
                         <InputGroupAddon>
-                            <Search aria-hidden="true" className="size-4 text-muted-foreground" />
+                            <Search
+                                aria-hidden="true"
+                                className="size-4 text-muted-foreground"
+                            />
                         </InputGroupAddon>
                     </InputGroup>
                 </form>
@@ -66,9 +76,7 @@ export default function SiteHeader() {
 }
 
 async function HeaderAccount() {
-    const session = await authServer.api.getSession({
-        headers: await headers(),
-    });
+    const session = await getSession();
 
     if (session?.user) {
         return (
