@@ -8,19 +8,22 @@ datasource db {
 }
 
 model User {
-  id              String    @id
+  id              String   @id
   name            String
-  username        String?
+  username        String?  @unique
   displayUsername String?
-  email           String
-  emailVerified   Boolean   @default(false)
+  email           String   @unique
+  emailVerified   Boolean  @default(false)
   image           String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  sessions        Session[]
-  accounts        Account[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  @@unique([email, username])
+  sessions Session[]
+  accounts Account[]
+
+  authorProfile     Author?
+  translatorProfile Translator?
+
   @@map("user")
 }
 
@@ -33,7 +36,8 @@ model Session {
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@index([userId])
@@ -70,4 +74,97 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Series {
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  coverUrl         String?
+  shortDescription String?
+  longDescription  String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  authors     SeriesAuthor[]
+  translators SeriesTranslator[]
+
+  genres Genre[]
+  tags   Tag[]
+
+  @@index([createdAt])
+  @@map("series")
+}
+
+model Author {
+  id   String  @id @default(cuid())
+  name String
+  slug String  @unique
+  bio  String?
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  series SeriesAuthor[]
+
+  @@map("author")
+}
+
+model SeriesAuthor {
+  seriesId String
+  authorId String
+  position Int    @default(0)
+
+  series Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, authorId])
+  @@index([authorId])
+  @@map("series_author")
+}
+
+model Translator {
+  id      String  @id @default(cuid())
+  penName String?
+  bio     String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  series SeriesTranslator[]
+
+  @@map("translator")
+}
+
+model SeriesTranslator {
+  seriesId     String
+  translatorId String
+  position     Int    @default(0)
+
+  series     Series     @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  translator Translator @relation(fields: [translatorId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, translatorId])
+  @@index([translatorId])
+  @@map("series_translator")
+}
+
+model Genre {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  series Series[]
+
+  @@map("genre")
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  series Series[]
+
+  @@map("tag")
 }
