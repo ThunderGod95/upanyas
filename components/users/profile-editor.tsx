@@ -301,32 +301,30 @@ export default function ProfileEditor({
                 </p>
             </section>
 
-            <form
-                onSubmit={form.handleSubmit(saveProfile)}
-                className="mt-9 space-y-9"
-            >
-                <div className="grid gap-7 sm:grid-cols-2">
-                    <div className="space-y-2">
+            <form onSubmit={form.handleSubmit(saveProfile)}>
+                <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
+                    <div className="pt-1">
                         <label
                             htmlFor="profile-name"
-                            className="text-sm font-semibold"
+                            className="text-sm font-medium"
                         >
                             Display name
                         </label>
+                    </div>
+
+                    <div className="max-w-md space-y-2">
                         <Input
                             id="profile-name"
                             autoComplete="nickname"
                             placeholder="Your display name"
                             aria-invalid={!!errors.name}
                             disabled={isSubmitting}
-                            className="mt-1 h-12 rounded-lg border-input bg-card px-4 shadow-none"
+                            className="h-11 border-input bg-card px-3.5 shadow-none"
                             {...form.register("name", {
                                 onChange: () => setSuccess(false),
                             })}
                         />
-                        <p className="text-xs text-muted-foreground">
-                            The name other readers will see.
-                        </p>
+
                         {errors.name && (
                             <p
                                 role="alert"
@@ -336,24 +334,28 @@ export default function ProfileEditor({
                             </p>
                         )}
                     </div>
+                </div>
 
-                    <div className="space-y-2">
+                <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
+                    <div className="pt-1">
                         <label
                             htmlFor="profile-username"
-                            className="text-sm font-semibold"
+                            className="text-sm font-medium"
                         >
                             Username
                         </label>
+                    </div>
+
+                    <div className="max-w-md space-y-2">
                         <Input
                             {...usernameField}
                             id="profile-username"
                             autoComplete="username"
                             autoCapitalize="none"
                             spellCheck={false}
-                            placeholder="Your username"
                             aria-invalid={!!errors.username}
                             disabled={isSubmitting}
-                            className="mt-1 h-12 rounded-lg border-input bg-card px-4 shadow-none"
+                            className="h-11 border-input bg-card px-3.5 shadow-none"
                             onChange={(event) => {
                                 ++usernameCheckId.current;
                                 usernameField.onChange(event);
@@ -371,9 +373,12 @@ export default function ProfileEditor({
                                 void checkUsername(event.currentTarget.value);
                             }}
                         />
+
                         <p className="text-xs text-muted-foreground">
-                            3–30 characters. Letters, numbers, _ and .
+                            3–30 characters. Letters, numbers, underscores and
+                            periods.
                         </p>
+
                         {errors.username && (
                             <p
                                 role="alert"
@@ -385,59 +390,60 @@ export default function ProfileEditor({
                     </div>
                 </div>
 
-                <div className="border-t border-border pt-8">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                            <h3 className="text-sm font-semibold font-sans">
-                                Email address
-                            </h3>
-                            <p className="mt-2 break-all text-sm text-foreground">
+                <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
+                    <p className="pt-1 text-sm font-medium">Email address</p>
+
+                    <div className="min-w-0 space-y-2">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                            <span className="break-all text-sm text-foreground">
                                 {user.email}
-                            </p>
-                            <p className="mt-2 text-xs text-muted-foreground">
-                                Your email address cannot be changed here yet.
-                            </p>
+                            </span>
+
+                            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                {user.emailVerified ? (
+                                    <>
+                                        <Check className="size-3.5" />
+                                        Verified
+                                    </>
+                                ) : (
+                                    "Not verified"
+                                )}
+                            </span>
                         </div>
 
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground select-none">
-                            {user.emailVerified ? (
-                                <>
-                                    <Check className="size-3.5 text-ornament" />{" "}
-                                    Verified
-                                </>
-                            ) : (
-                                "Not Verified"
-                            )}
-                        </span>
+                        <p className="text-xs text-muted-foreground">
+                            Email changes are not available yet.
+                        </p>
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-4 border-t border-border pt-7 sm:flex-row sm:items-center sm:justify-between">
-                    <div aria-live="polite" className="text-sm">
-                        {errors.root && (
-                            <p role="alert" className="text-destructive">
-                                {errors.root.message}
-                            </p>
-                        )}
+                <div className="grid gap-4 pt-7 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4 sm:col-start-2">
+                        <div aria-live="polite" className="text-sm">
+                            {errors.root && (
+                                <p role="alert" className="text-destructive">
+                                    {errors.root.message}
+                                </p>
+                            )}
 
-                        {success && !errors.root && (
-                            <p className="inline-flex items-center gap-2 text-foreground">
-                                <Check className="size-4 text-ornament" />
-                                Your profile has been updated.
-                            </p>
-                        )}
+                            {success && !errors.root && (
+                                <p className="text-muted-foreground">
+                                    Changes saved.
+                                </p>
+                            )}
+                        </div>
+
+                        <Button
+                            type="submit"
+                            disabled={!isDirty || isSubmitting}
+                            className="ml-auto h-10 px-5"
+                        >
+                            {isSubmitting && (
+                                <LoaderCircle className="size-4 animate-spin" />
+                            )}
+                            {isSubmitting ? "Saving..." : "Save changes"}
+                        </Button>
                     </div>
-
-                    <Button
-                        type="submit"
-                        disabled={!isDirty || isSubmitting}
-                        className="px-6"
-                    >
-                        {isSubmitting && (
-                            <LoaderCircle className="size-4 animate-spin" />
-                        )}
-                        {isSubmitting ? "Saving..." : "save changes"}
-                    </Button>
                 </div>
             </form>
         </div>
