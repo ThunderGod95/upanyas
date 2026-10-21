@@ -1,14 +1,16 @@
 "use client";
 
-import z from "zod";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera, Check, LoaderCircle, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
+
 import { authClient } from "@/lib/auth/client";
+
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { Camera, Check, LoaderCircle, Trash } from "lucide-react";
 import { Input } from "../ui/input";
 
 const profileSchema = z.object({
@@ -22,10 +24,7 @@ const profileSchema = z.object({
         .trim()
         .min(3, "Username must be at least 3 characters.")
         .max(30, "Username cannot exceed 30 characters.")
-        .regex(
-            /^[a-zA-Z0-9_.]+$/,
-            "Only letters, numbers, underscores, and dots are allowed.",
-        ),
+        .regex(/^[a-zA-Z0-9_.]+$/, "Only letters, numbers, underscores, and dots are allowed."),
 });
 
 type ProfileData = z.infer<typeof profileSchema>;
@@ -43,10 +42,7 @@ interface ProfileEditorProps {
     memberSince: string;
 }
 
-export default function ProfileEditor({
-    user,
-    memberSince,
-}: ProfileEditorProps) {
+export default function ProfileEditor({ user, memberSince }: ProfileEditorProps) {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const usernameCheckId = useRef(0);
@@ -169,9 +165,7 @@ export default function ProfileEditor({
             setAvatar(result.url);
             router.refresh();
         } catch (error) {
-            setAvatarError(
-                error instanceof Error ? error.message : "Upload failed.",
-            );
+            setAvatarError(error instanceof Error ? error.message : "Upload failed.");
         } finally {
             setAvatarBusy(false);
 
@@ -198,9 +192,7 @@ export default function ProfileEditor({
             setAvatar(null);
             router.refresh();
         } catch (error) {
-            setAvatarError(
-                error instanceof Error ? error.message : "Removed failed.",
-            );
+            setAvatarError(error instanceof Error ? error.message : "Removed failed.");
         } finally {
             setAvatarBusy(false);
         }
@@ -228,10 +220,7 @@ export default function ProfileEditor({
                         </div>
 
                         <div className="min-w-0">
-                            <h3
-                                id="potrait-heading"
-                                className="truncate font-heading text-2xl"
-                            >
+                            <h3 id="potrait-heading" className="truncate font-heading text-2xl">
                                 {user.name}
                             </h3>
                             <p className="truncate text-sm text-muted-foreground">
@@ -296,18 +285,14 @@ export default function ProfileEditor({
                 )}
 
                 <p className="mt-5 text-xs text-muted-foreground">
-                    JPEG, PNG or WebP. Maximum 2 MiB. Images are cropped to a
-                    square.
+                    JPEG, PNG or WebP. Maximum 2 MiB. Images are cropped to a square.
                 </p>
             </section>
 
             <form onSubmit={form.handleSubmit(saveProfile)}>
                 <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
                     <div className="pt-1">
-                        <label
-                            htmlFor="profile-name"
-                            className="text-sm font-medium"
-                        >
+                        <label htmlFor="profile-name" className="text-sm font-medium">
                             Display name
                         </label>
                     </div>
@@ -326,10 +311,7 @@ export default function ProfileEditor({
                         />
 
                         {errors.name && (
-                            <p
-                                role="alert"
-                                className="text-xs text-destructive"
-                            >
+                            <p role="alert" className="text-xs text-destructive">
                                 {errors.name.message}
                             </p>
                         )}
@@ -338,10 +320,7 @@ export default function ProfileEditor({
 
                 <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
                     <div className="pt-1">
-                        <label
-                            htmlFor="profile-username"
-                            className="text-sm font-medium"
-                        >
+                        <label htmlFor="profile-username" className="text-sm font-medium">
                             Username
                         </label>
                     </div>
@@ -361,10 +340,7 @@ export default function ProfileEditor({
                                 usernameField.onChange(event);
                                 setSuccess(false);
 
-                                if (
-                                    form.getFieldState("username").error
-                                        ?.type === "availability"
-                                ) {
+                                if (form.getFieldState("username").error?.type === "availability") {
                                     form.clearErrors("username");
                                 }
                             }}
@@ -375,15 +351,11 @@ export default function ProfileEditor({
                         />
 
                         <p className="text-xs text-muted-foreground">
-                            3–30 characters. Letters, numbers, underscores and
-                            periods.
+                            3–30 characters. Letters, numbers, underscores and periods.
                         </p>
 
                         {errors.username && (
-                            <p
-                                role="alert"
-                                className="text-xs text-destructive"
-                            >
+                            <p role="alert" className="text-xs text-destructive">
                                 {errors.username.message}
                             </p>
                         )}
@@ -395,9 +367,7 @@ export default function ProfileEditor({
 
                     <div className="min-w-0 space-y-2">
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                            <span className="break-all text-sm text-foreground">
-                                {user.email}
-                            </span>
+                            <span className="text-sm break-all text-foreground">{user.email}</span>
 
                             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                                 {user.emailVerified ? (
@@ -427,9 +397,7 @@ export default function ProfileEditor({
                             )}
 
                             {success && !errors.root && (
-                                <p className="text-muted-foreground">
-                                    Changes saved.
-                                </p>
+                                <p className="text-muted-foreground">Changes saved.</p>
                             )}
                         </div>
 
@@ -438,9 +406,7 @@ export default function ProfileEditor({
                             disabled={!isDirty || isSubmitting}
                             className="ml-auto h-10 px-5"
                         >
-                            {isSubmitting && (
-                                <LoaderCircle className="size-4 animate-spin" />
-                            )}
+                            {isSubmitting && <LoaderCircle className="size-4 animate-spin" />}
                             {isSubmitting ? "Saving..." : "Save changes"}
                         </Button>
                     </div>

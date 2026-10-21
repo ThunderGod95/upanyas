@@ -1,11 +1,12 @@
-import AuthenticatedContent from "@/components/authenticated-content";
-import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import AuthenticatedContent from "@/components/authenticated-content";
+import { Spinner } from "@/components/ui/spinner";
+
 export default async function MeLayout({ children }: LayoutProps<"/user/me">) {
     return (
-        <div className="site-container pb-20 pt-10 lg:pt-14">
+        <div className="site-container pt-10 pb-20 lg:pt-14">
             <div className="grid items-start gap-y-8 xl:grid-cols-[13rem_minmax(0,48rem)_13rem] xl:justify-center xl:gap-x-8 2xl:gap-x-12">
                 <aside className="mx-auto w-full max-w-3xl border-b border-border pb-6 xl:sticky xl:top-28 xl:mx-0 xl:border-0 xl:pb-0">
                     <nav aria-label="Account navigation">
@@ -28,7 +29,7 @@ export default async function MeLayout({ children }: LayoutProps<"/user/me">) {
 
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none hidden select-none justify-self-center pt-3 font-heading text-[clamp(11rem,15vw,14rem)] leading-none text-ornament/8 xl:block"
+                    className="pointer-events-none hidden justify-self-center pt-3 font-heading text-[clamp(11rem,15vw,14rem)] leading-none text-ornament/8 select-none xl:block"
                 >
                     U
                 </div>

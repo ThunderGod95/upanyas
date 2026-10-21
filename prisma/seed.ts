@@ -90,13 +90,7 @@ const demoSeries = [
             slug: "demo-author-three",
         },
         genres: ["fantasy", "xianxia", "romance"],
-        tags: [
-            "cultivation",
-            "transmigration",
-            "weak-to-strong",
-            "academy",
-            "martial-arts",
-        ],
+        tags: ["cultivation", "transmigration", "weak-to-strong", "academy", "martial-arts"],
     },
 ] as const;
 

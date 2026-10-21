@@ -3,10 +3,10 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
 import { username } from "better-auth/plugins";
-
-import { prisma } from "@/lib/prisma";
 import { after } from "next/server";
+
 import { sendEmail } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 
 export const authServer = betterAuth({
     database: prismaAdapter(prisma, {
@@ -49,10 +49,7 @@ export const authServer = betterAuth({
                             text: `A request was made to change your email to ${newEmail}.\n\nApprove this change:\n${url}\n\nIf you didn't request this, do not approve it.`,
                         });
                     } catch (error) {
-                        console.error(
-                            "email change confirmation failed:",
-                            error,
-                        );
+                        console.error("email change confirmation failed:", error);
                     }
                 });
             },
@@ -68,8 +65,7 @@ export const authServer = betterAuth({
                 "image" in ctx.body
             ) {
                 throw new APIError("FORBIDDEN", {
-                    message:
-                        "use the avatar upload endpoint to change your image.",
+                    message: "use the avatar upload endpoint to change your image.",
                 });
             }
         }),

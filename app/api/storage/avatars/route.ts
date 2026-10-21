@@ -7,12 +7,7 @@ import sharp from "sharp";
 import { apiError, validOrigin } from "@/lib/apiUtils";
 import { authServer } from "@/lib/auth/server";
 import { prisma } from "@/lib/prisma";
-import {
-    AVATAR_BUCKET,
-    avatarPublicUrl,
-    ownedAvatarKey,
-    s3,
-} from "@/lib/storage/s3";
+import { AVATAR_BUCKET, avatarPublicUrl, ownedAvatarKey, s3 } from "@/lib/storage/s3";
 
 const MAX_SIZE = 2 * 1024 * 1024;
 const MAX_PIXELS = 16_000_000;
@@ -55,12 +50,7 @@ export async function POST(request: NextRequest) {
         return apiError("request too large", 413);
     }
 
-    if (
-        !request.headers
-            .get("content-type")
-            ?.toLowerCase()
-            .startsWith("multipart/form-data")
-    ) {
+    if (!request.headers.get("content-type")?.toLowerCase().startsWith("multipart/form-data")) {
         return apiError("expected multipart form data.", 415);
     }
 
@@ -112,7 +102,7 @@ export async function POST(request: NextRequest) {
             })
             .webp({ quality: 82 })
             .toBuffer();
-    } catch (cause) {
+    } catch {
         return apiError("unable to process this image.", 422);
     }
 

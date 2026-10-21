@@ -1,5 +1,4 @@
 import "server-only";
-
 import { sendWithMailpit } from "@/lib/email/mailpit";
 import { sendWithResend } from "@/lib/email/resend";
 

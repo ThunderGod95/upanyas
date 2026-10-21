@@ -1,6 +1,6 @@
 import "server-only";
-
 import nodemailer from "nodemailer";
+
 import type { EmailMessage } from "@/lib/email";
 
 const transporter = nodemailer.createTransport({

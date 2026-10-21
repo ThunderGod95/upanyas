@@ -1,5 +1,4 @@
 import "server-only";
-
 import { Resend } from "resend";
 
 import type { EmailMessage } from "@/lib/email";
