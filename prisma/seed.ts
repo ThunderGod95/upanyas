@@ -121,7 +121,7 @@ async function seedReferenceData() {
 }
 
 async function seedDemoSeries() {
-    for (const entry of demoSeries) {
+    for (const [position, entry] of demoSeries.entries()) {
         const author = await prisma.author.upsert({
             where: { slug: entry.author.slug },
             update: {},
@@ -163,6 +163,15 @@ async function seedDemoSeries() {
                 tags: {
                     set: entry.tags.map((slug) => ({ slug })),
                 },
+            },
+        });
+
+        await prisma.featuredSeries.upsert({
+            where: { seriesId: series.id },
+            update: { position },
+            create: {
+                seriesId: series.id,
+                position,
             },
         });
 
