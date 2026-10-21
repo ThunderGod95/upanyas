@@ -5,6 +5,8 @@ import { betterAuth } from "better-auth/minimal";
 import { username } from "better-auth/plugins";
 
 import { prisma } from "@/lib/prisma";
+import { after } from "next/server";
+import { sendEmail } from "@/lib/email";
 
 export const authServer = betterAuth({
     database: prismaAdapter(prisma, {
@@ -12,7 +14,49 @@ export const authServer = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
-        requireEmailVerification: false,
+        requireEmailVerification: true,
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        expiresIn: 3600,
+
+        sendVerificationEmail: async ({ user, url }) => {
+            after(async () => {
+                try {
+                    await sendEmail({
+                        to: user.email,
+                        subject: "Verify your Upanyas email",
+                        text: `Verify your email address using this link:\n\n${url}\n\nThis link expires in one hour.`,
+                    });
+                } catch {
+                    console.error("verification email failed.");
+                }
+            });
+        },
+    },
+    user: {
+        changeEmail: {
+            enabled: true,
+            updateEmailWithoutVerification: false,
+
+            sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+                after(async () => {
+                    try {
+                        await sendEmail({
+                            to: user.email,
+                            subject: "Confirm your Upanyas email change",
+                            text: `A request was made to change your email to ${newEmail}.\n\nApprove this change:\n${url}\n\nIf you didn't request this, do not approve it.`,
+                        });
+                    } catch (error) {
+                        console.error(
+                            "email change confirmation failed:",
+                            error,
+                        );
+                    }
+                });
+            },
+        },
     },
     plugins: [username()],
     hooks: {
@@ -24,7 +68,8 @@ export const authServer = betterAuth({
                 "image" in ctx.body
             ) {
                 throw new APIError("FORBIDDEN", {
-                    message: "use the avatar upload endpoint to change your image.",
+                    message:
+                        "use the avatar upload endpoint to change your image.",
                 });
             }
         }),
