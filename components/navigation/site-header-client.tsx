@@ -219,7 +219,7 @@ export function AccountMenu({
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <Link href="/account">
+                    <Link href="/user/me">
                         <UserRoundCog className="size-4" />
                         Account Settings
                     </Link>
