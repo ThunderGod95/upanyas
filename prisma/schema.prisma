@@ -76,15 +76,49 @@ model Verification {
   @@map("verification")
 }
 
+enum Language {
+  ENGLISH
+  CHINESE
+  KOREAN
+  JAPANESE
+  HINDI
+  UNKNOWN
+}
+
+enum SeriesVisibility {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+enum SeriesSerializationStatus {
+  UNKNOWN
+  NOT_APPLICABLE
+  NOT_STARTED
+  ONGOING
+  HIATUS
+  COMPLETED
+  DISCONTINUED
+}
+
 model Series {
-  id               String   @id @default(cuid())
+  id               String  @id @default(cuid())
   title            String
-  slug             String   @unique
+  slug             String  @unique
   coverUrl         String?
   shortDescription String?
   longDescription  String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+
+  visibility        SeriesVisibility          @default(PRIVATE)
+  originalStatus    SeriesSerializationStatus @default(UNKNOWN)
+  translationStatus SeriesSerializationStatus @default(UNKNOWN)
+
+  originalLanguage Language @default(UNKNOWN)
+  language         Language @default(UNKNOWN)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   authors     SeriesAuthor[]
   translators SeriesTranslator[]
@@ -94,6 +128,7 @@ model Series {
 
   featured FeaturedSeries?
 
+  @@index([originalStatus, translationStatus, visibility, publishedAt(sort: Desc)])
   @@index([createdAt])
   @@map("series")
 }
