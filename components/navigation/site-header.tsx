@@ -3,10 +3,18 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import ThemeToggle from "@/components/theme-toggle";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group";
 import { getSession } from "@/lib/auth/server/utils";
 
-import { AccountMenu, DesktopNavigation, MobileNavigation } from "./site-header-client";
+import {
+    AccountMenu,
+    DesktopNavigation,
+    MobileNavigation,
+} from "./site-header-client";
 
 export default function SiteHeader() {
     return (
@@ -41,7 +49,10 @@ export default function SiteHeader() {
                             className="h-full"
                         />
                         <InputGroupAddon>
-                            <Search aria-hidden="true" className="size-4 text-muted-foreground" />
+                            <Search
+                                aria-hidden="true"
+                                className="size-4 text-muted-foreground"
+                            />
                         </InputGroupAddon>
                     </InputGroup>
                 </form>
@@ -70,6 +81,7 @@ async function HeaderAccount() {
     if (session?.user) {
         return (
             <AccountMenu
+                id={session.user.id}
                 name={session.user.name}
                 email={session.user.email}
                 image={session.user.image}

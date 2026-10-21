@@ -38,7 +38,10 @@ export function DesktopNavigation() {
     return (
         <>
             {links.length > 0 && (
-                <div aria-hidden="true" className="hidden h-7 w-px bg-border lg:block" />
+                <div
+                    aria-hidden="true"
+                    className="hidden h-7 w-px bg-border lg:block"
+                />
             )}
 
             <nav
@@ -92,15 +95,22 @@ export function MobileNavigation() {
                 </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" sideOffset={12} className="w-56 rounded-xl p-2">
+            <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-56 rounded-xl p-2"
+            >
                 {links.map(({ label, href }) => (
                     <DropdownMenuItem key={href} asChild>
                         <Link
                             href={href}
-                            aria-current={isActive(pathname, href) ? "page" : undefined}
+                            aria-current={
+                                isActive(pathname, href) ? "page" : undefined
+                            }
                             className={cn(
                                 "cursor-pointer rounded-lg",
-                                isActive(pathname, href) && "bg-accent text-accent-foreground",
+                                isActive(pathname, href) &&
+                                    "bg-accent text-accent-foreground",
                             )}
                         >
                             {label}
@@ -111,7 +121,10 @@ export function MobileNavigation() {
                 {links.length > 0 && <DropdownMenuSeparator />}
 
                 <DropdownMenuItem asChild>
-                    <Link href="/search" className="cursor-pointer gap-2 rounded-lg">
+                    <Link
+                        href="/search"
+                        className="cursor-pointer gap-2 rounded-lg"
+                    >
                         <Search className="size-4" />
                         Search novels
                     </Link>
@@ -122,10 +135,12 @@ export function MobileNavigation() {
 }
 
 export function AccountMenu({
+    id,
     name,
     email,
     image,
 }: {
+    id: string;
     name: string;
     email: string;
     image?: string | null;
@@ -168,7 +183,10 @@ export function AccountMenu({
                     className="size-10 rounded-full border border-border bg-card p-0 transition-colors hover:bg-secondary sm:w-auto sm:gap-2 sm:py-1 sm:pr-3 sm:pl-1"
                 >
                     <Avatar>
-                        <AvatarImage src={image ? image : undefined} alt={`@${name}`} />
+                        <AvatarImage
+                            src={image ? image : undefined}
+                            alt={`@${name}`}
+                        />
                         <AvatarFallback className="bg-accent text-accent-foreground">
                             {initial}
                         </AvatarFallback>
@@ -185,9 +203,15 @@ export function AccountMenu({
                 </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" sideOffset={12} className="w-60 rounded-xl p-2">
+            <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-60 rounded-xl p-2"
+            >
                 <DropdownMenuLabel className="flex flex-col gap-0.5 px-2 py-2">
-                    <span className="truncate text-sm font-semibold">{name}</span>
+                    <span className="truncate text-sm font-semibold">
+                        {name}
+                    </span>
 
                     <span className="truncate text-xs font-normal text-muted-foreground">
                         {email}
@@ -204,7 +228,7 @@ export function AccountMenu({
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <Link href={`/users/${name}`}>
+                    <Link href={`/user/profile/${id}`}>
                         <UserCircleIcon className="size-4" />
                         User Profile
                     </Link>
@@ -230,7 +254,10 @@ export function AccountMenu({
                 </DropdownMenuItem>
 
                 {error && (
-                    <p role="alert" className="px-2 py-1 text-xs text-destructive">
+                    <p
+                        role="alert"
+                        className="px-2 py-1 text-xs text-destructive"
+                    >
                         {error}
                     </p>
                 )}
