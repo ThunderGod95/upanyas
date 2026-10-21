@@ -1,9 +1,5 @@
-import FeaturedNovels from "@/components/home/featured-novels";
+import FeaturedNovelsSection from "@/components/home/featured-novels-section";
 
 export default function Home() {
-    return (
-        <>
-            <FeaturedNovels novels={[]} />
-        </>
-    );
+    return <FeaturedNovelsSection />;
 }
