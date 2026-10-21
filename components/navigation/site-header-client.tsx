@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/ui/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const links: { label: string; href: string }[] = [];
 
@@ -37,7 +38,10 @@ export function DesktopNavigation() {
     return (
         <>
             {links.length > 0 && (
-                <div aria-hidden="true" className="hidden h-7 w-px bg-border lg:block" />
+                <div
+                    aria-hidden="true"
+                    className="hidden h-7 w-px bg-border lg:block"
+                />
             )}
 
             <nav
@@ -91,15 +95,22 @@ export function MobileNavigation() {
                 </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" sideOffset={12} className="w-56 rounded-xl p-2">
+            <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-56 rounded-xl p-2"
+            >
                 {links.map(({ label, href }) => (
                     <DropdownMenuItem key={href} asChild>
                         <Link
                             href={href}
-                            aria-current={isActive(pathname, href) ? "page" : undefined}
+                            aria-current={
+                                isActive(pathname, href) ? "page" : undefined
+                            }
                             className={cn(
                                 "cursor-pointer rounded-lg",
-                                isActive(pathname, href) && "bg-accent text-accent-foreground",
+                                isActive(pathname, href) &&
+                                    "bg-accent text-accent-foreground",
                             )}
                         >
                             {label}
@@ -110,7 +121,10 @@ export function MobileNavigation() {
                 {links.length > 0 && <DropdownMenuSeparator />}
 
                 <DropdownMenuItem asChild>
-                    <Link href="/search" className="cursor-pointer gap-2 rounded-lg">
+                    <Link
+                        href="/search"
+                        className="cursor-pointer gap-2 rounded-lg"
+                    >
                         <Search className="size-4" />
                         Search novels
                     </Link>
@@ -120,7 +134,15 @@ export function MobileNavigation() {
     );
 }
 
-export function AccountMenu({ name, email }: { name: string; email: string }) {
+export function AccountMenu({
+    name,
+    email,
+    image,
+}: {
+    name: string;
+    email: string;
+    image?: string | null;
+}) {
     const router = useRouter();
     const [signingOut, setSigningOut] = useState(false);
     const [error, setError] = useState("");
@@ -158,9 +180,15 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
                     aria-label={`Account menu for ${name}`}
                     className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card py-1 pr-2 pl-1 transition-colors hover:bg-secondary sm:pr-3"
                 >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
-                        {initial}
-                    </span>
+                    <Avatar>
+                        <AvatarImage
+                            src={image ? image : undefined}
+                            alt={`@${name}`}
+                        />
+                        <AvatarFallback className="bg-accent text-accent-foreground">
+                            {initial}
+                        </AvatarFallback>
+                    </Avatar>
 
                     <span className="hidden max-w-28 truncate text-[0.825rem] font-medium text-foreground sm:block">
                         {name}
@@ -173,9 +201,15 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
                 </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" sideOffset={12} className="w-60 rounded-xl p-2">
+            <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-60 rounded-xl p-2"
+            >
                 <DropdownMenuLabel className="flex flex-col gap-0.5 px-2 py-2">
-                    <span className="truncate text-sm font-semibold">{name}</span>
+                    <span className="truncate text-sm font-semibold">
+                        {name}
+                    </span>
 
                     <span className="truncate text-xs font-normal text-muted-foreground">
                         {email}
@@ -218,7 +252,10 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
                 </DropdownMenuItem>
 
                 {error && (
-                    <p role="alert" className="px-2 py-1 text-xs text-destructive">
+                    <p
+                        role="alert"
+                        className="px-2 py-1 text-xs text-destructive"
+                    >
                         {error}
                     </p>
                 )}
