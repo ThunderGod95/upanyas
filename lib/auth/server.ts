@@ -24,8 +24,7 @@ export const authServer = betterAuth({
                 "image" in ctx.body
             ) {
                 throw new APIError("FORBIDDEN", {
-                    message:
-                        "use the avatar upload endpoint to change your image.",
+                    message: "use the avatar upload endpoint to change your image.",
                 });
             }
         }),
