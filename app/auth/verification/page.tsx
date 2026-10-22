@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import VerificationPending from "@/components/auth/verification-pending";
 import { authClient } from "@/lib/auth/client";
@@ -12,15 +12,20 @@ type VerificationContext = {
     invalidLink: boolean;
 };
 
-export default function VerificationPage() {
-    const [context, setContext] = useState<VerificationContext | null>(null);
+const subscribe = () => () => {};
 
-    useEffect(() => {
-        setContext({
-            email: readPendingVerification(),
-            invalidLink: new URLSearchParams(window.location.search).has("error"),
-        });
-    }, []);
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+export default function VerificationPage() {
+    const hydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+
+    const context: VerificationContext | null = hydrated
+        ? {
+              email: readPendingVerification(),
+              invalidLink: new URLSearchParams(window.location.search).has("error"),
+          }
+        : null;
 
     if (!context) {
         return (

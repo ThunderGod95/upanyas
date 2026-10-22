@@ -2,7 +2,6 @@
 
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 import {
     DropdownMenu,
@@ -14,11 +13,6 @@ import {
 
 export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     return (
         <DropdownMenu>
@@ -39,10 +33,7 @@ export default function ThemeToggle() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" sideOffset={12} className="w-48 rounded-xl p-1.5">
-                <DropdownMenuRadioGroup
-                    value={mounted ? theme : undefined}
-                    onValueChange={setTheme}
-                >
+                <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
                     <DropdownMenuRadioItem value="light">
                         <Sun className="size-4" strokeWidth={1.7} />
                         Light

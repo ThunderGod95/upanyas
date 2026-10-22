@@ -27,7 +27,9 @@ export default function SiteHeader() {
                     Upanyas<span className="text-ornament">.</span>
                 </Link>
 
-                <DesktopNavigation />
+                <Suspense fallback={null}>
+                    <DesktopNavigation />
+                </Suspense>
 
                 <div className="flex-1" />
 
@@ -57,7 +59,9 @@ export default function SiteHeader() {
                         <HeaderAccount />
                     </Suspense>
 
-                    <MobileNavigation />
+                    <Suspense fallback={<div aria-hidden="true" className="size-9 lg:hidden" />}>
+                        <MobileNavigation />
+                    </Suspense>
                 </div>
             </div>
         </header>
