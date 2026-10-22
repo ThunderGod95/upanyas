@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 
+const DEMO_USER_ID = "demo-seed-translator";
+const DEMO_USER_EMAIL = "seed-translator@example.invalid";
+const DEMO_DATE = new Date("2026-10-01T12:00:00.000Z");
+
 const genres = [
     ["Fantasy", "fantasy"],
     ["Xianxia", "xianxia"],
@@ -55,6 +59,11 @@ const demoSeries = [
             "political-intrigue",
             "immortality",
         ],
+        visibility: "PUBLIC",
+        originalStatus: "ONGOING",
+        translationStatus: "ONGOING",
+        originalLanguage: "CHINESE",
+        volumes: ["Azure Profundity in the River", "The Great Whale Beneath the Waning Moon"],
     },
     {
         title: "Journey through Myriad Paths",
@@ -76,6 +85,11 @@ const demoSeries = [
             "political-intrigue",
             "immortality",
         ],
+        visibility: "PUBLIC",
+        originalStatus: "ONGOING",
+        translationStatus: "ONGOING",
+        originalLanguage: "CHINESE",
+        volumes: ["First Steps into the Jianghu", "Journey to Tang"],
     },
     {
         title: "No Money to Cultivate Immortality",
@@ -91,8 +105,236 @@ const demoSeries = [
         },
         genres: ["fantasy", "xianxia", "romance"],
         tags: ["cultivation", "transmigration", "weak-to-strong", "academy", "martial-arts"],
+        visibility: "PUBLIC",
+        originalStatus: "ONGOING",
+        translationStatus: "ONGOING",
+        originalLanguage: "CHINESE",
+        volumes: ["The Cost of Cultivation", "A Debt to Heaven"],
+    },
+    {
+        title: "Unlisted Development Series",
+        slug: "demo-unlisted",
+        coverUrl: null,
+        shortDescription: "A series for testing direct-link access.",
+        longDescription: "Synthetic content for verifying unlisted series navigation.",
+        author: {
+            name: "Demo Unlisted Author",
+            slug: "demo-author-unlisted",
+        },
+        genres: ["fantasy", "adventure"],
+        tags: ["slow-burn"],
+        visibility: "UNLISTED",
+        originalStatus: "COMPLETED",
+        translationStatus: "ONGOING",
+        originalLanguage: "JAPANESE",
+        volumes: ["Volume One", "Volume Two"],
+    },
+    {
+        title: "Private Development Series",
+        slug: "demo-private",
+        coverUrl: null,
+        shortDescription: "A private series for access-control testing.",
+        longDescription: "Synthetic content for testing private series and drafts.",
+        author: {
+            name: "Demo Private Author",
+            slug: "demo-author-private",
+        },
+        genres: ["fantasy"],
+        tags: ["slow-burn"],
+        visibility: "PRIVATE",
+        originalStatus: "NOT_STARTED",
+        translationStatus: "NOT_STARTED",
+        originalLanguage: "KOREAN",
+        volumes: ["Volume One", "Volume Two"],
     },
 ] as const;
+
+const demoChapters = [
+    {
+        position: 1,
+        volume: 1,
+        numberLabel: "1",
+        title: "The First Step",
+        text: "The first chapter introduces the setting and its central conflict.",
+        kind: "published",
+    },
+    {
+        position: 2,
+        volume: 1,
+        numberLabel: "2",
+        title: "A Change of Plans",
+        text: "An unexpected decision changes the direction of the journey.",
+        kind: "published-with-draft",
+    },
+    {
+        position: 3,
+        volume: 2,
+        numberLabel: "3",
+        title: "Work in Progress",
+        text: "This chapter exists only as an unpublished working draft.",
+        kind: "draft",
+    },
+    {
+        position: 4,
+        volume: null,
+        numberLabel: "Extra",
+        title: "An Archived Interlude",
+        text: "This old chapter is retained for archive-related testing.",
+        kind: "archived",
+    },
+] as const;
+
+// Mirroring ProseMirror / Tiptap document structure
+function documentFor(text: string) {
+    return {
+        type: "doc",
+        content: [
+            {
+                type: "paragraph",
+                content: [{ type: "text", text }],
+            },
+        ],
+    };
+}
+
+function textCounts(text: string) {
+    return {
+        wordCount: text.trim().split(/\s+/).filter(Boolean).length,
+        characterCount: Array.from(text).length,
+    };
+}
+
+async function seedDemoChapters(
+    seriesId: string,
+    seriesTitle: string,
+    volumeTitles: readonly string[],
+    privateSeries: boolean,
+) {
+    const volumes = [];
+
+    for (const [index, title] of volumeTitles.entries()) {
+        const position = index + 1;
+
+        const volume = await prisma.volume.upsert({
+            where: {
+                seriesId_position: { seriesId, position },
+            },
+            update: {},
+            create: { seriesId, position, title },
+        });
+
+        volumes.push(volume);
+    }
+
+    for (const fixture of demoChapters) {
+        // Private series contain drafts only.
+        const kind = privateSeries ? "draft" : fixture.kind;
+
+        const volumeId = fixture.volume === null ? null : volumes[fixture.volume - 1]!.id;
+
+        const firstPublishedAt =
+            kind === "published" || kind === "published-with-draft" || kind === "archived"
+                ? DEMO_DATE
+                : null;
+
+        const chapter = await prisma.chapter.upsert({
+            where: {
+                seriesId_position: {
+                    seriesId,
+                    position: fixture.position,
+                },
+            },
+            update: {},
+            create: {
+                seriesId,
+                volumeId,
+                position: fixture.position,
+                numberLabel: fixture.numberLabel,
+                firstPublishedAt,
+                archivedAt: kind === "archived" ? new Date("2026-10-20T12:00:00.000Z") : null,
+            },
+        });
+
+        const text = `${seriesTitle}: ${fixture.text}`;
+        let baseRevisionId: string | null = null;
+
+        if (kind !== "draft") {
+            const revision1 = await prisma.chapterRevision.upsert({
+                where: {
+                    chapterId_revisionNumber: {
+                        chapterId: chapter.id,
+                        revisionNumber: 1,
+                    },
+                },
+                update: {},
+                create: {
+                    chapterId: chapter.id,
+                    revisionNumber: 1,
+                    title: fixture.title,
+                    content: documentFor(text),
+                    ...textCounts(text),
+                    changeSummary: "Initial revision",
+                    createdById: DEMO_USER_ID,
+                },
+            });
+
+            let activeRevision = revision1;
+
+            if (kind === "published-with-draft") {
+                const revisedText = `${text} The conclusion has been revised.`;
+
+                activeRevision = await prisma.chapterRevision.upsert({
+                    where: {
+                        chapterId_revisionNumber: {
+                            chapterId: chapter.id,
+                            revisionNumber: 2,
+                        },
+                    },
+                    update: {},
+                    create: {
+                        chapterId: chapter.id,
+                        revisionNumber: 2,
+                        title: fixture.title,
+                        content: documentFor(revisedText),
+                        ...textCounts(revisedText),
+                        changeSummary: "Revised conclusion",
+                        createdById: DEMO_USER_ID,
+                    },
+                });
+            }
+
+            if (kind !== "archived") {
+                await prisma.chapterPublication.upsert({
+                    where: { chapterId: chapter.id },
+                    update: {},
+                    create: {
+                        chapterId: chapter.id,
+                        revisionId: activeRevision.id,
+                        publishedAt: DEMO_DATE,
+                    },
+                });
+            }
+
+            baseRevisionId = activeRevision.id;
+        }
+
+        if (kind === "draft" || kind === "published-with-draft") {
+            await prisma.chapterDraft.upsert({
+                where: { chapterId: chapter.id },
+                update: {},
+                create: {
+                    chapterId: chapter.id,
+                    baseRevisionId,
+                    title: fixture.title,
+                    content: documentFor(`${text} Unpublished working changes.`),
+                    translatorNote: "Synthetic development draft.",
+                    version: kind === "draft" ? 1 : 2,
+                    lastEditedById: DEMO_USER_ID,
+                },
+            });
+        }
+    }
+}
 
 async function seedReferenceData() {
     for (const [name, slug] of genres) {
@@ -115,6 +357,26 @@ async function seedReferenceData() {
 }
 
 async function seedDemoSeries() {
+    await prisma.user.upsert({
+        where: { id: DEMO_USER_ID },
+        update: {},
+        create: {
+            id: DEMO_USER_ID,
+            email: DEMO_USER_EMAIL,
+            name: "Development Translator",
+            emailVerified: false,
+        },
+    });
+
+    const translator = await prisma.translator.upsert({
+        where: { userId: DEMO_USER_ID },
+        update: {},
+        create: {
+            userId: DEMO_USER_ID,
+            penName: "Development Translator",
+        },
+    });
+
     for (const [position, entry] of demoSeries.entries()) {
         const author = await prisma.author.upsert({
             where: { slug: entry.author.slug },
@@ -131,8 +393,14 @@ async function seedDemoSeries() {
                 coverUrl: entry.coverUrl,
                 shortDescription: entry.shortDescription,
                 longDescription: entry.longDescription,
+                visibility: entry.visibility,
+                originalStatus: entry.originalStatus,
+                translationStatus: entry.translationStatus,
+                language: "ENGLISH" as const,
+                publishedAt: entry.visibility === "PRIVATE" ? null : DEMO_DATE,
             },
         });
+
         await prisma.seriesAuthor.upsert({
             where: {
                 seriesId_authorId: {
@@ -144,6 +412,21 @@ async function seedDemoSeries() {
             create: {
                 seriesId: series.id,
                 authorId: author.id,
+                position: 0,
+            },
+        });
+
+        await prisma.seriesTranslator.upsert({
+            where: {
+                seriesId_translatorId: {
+                    seriesId: series.id,
+                    translatorId: translator.id,
+                },
+            },
+            update: {},
+            create: {
+                seriesId: series.id,
+                translatorId: translator.id,
                 position: 0,
             },
         });
@@ -160,16 +443,29 @@ async function seedDemoSeries() {
             },
         });
 
-        await prisma.featuredSeries.upsert({
-            where: { seriesId: series.id },
-            update: { position },
-            create: {
-                seriesId: series.id,
-                position,
-            },
-        });
+        if (entry.visibility === "PUBLIC" && position < demoSeries.length) {
+            await prisma.featuredSeries.upsert({
+                where: { seriesId: series.id },
+                update: { position },
+                create: {
+                    seriesId: series.id,
+                    position,
+                },
+            });
+        } else {
+            await prisma.featuredSeries.deleteMany({
+                where: { seriesId: series.id },
+            });
+        }
 
-        console.log(`seeded: ${entry.title}`);
+        await seedDemoChapters(
+            series.id,
+            series.title,
+            entry.volumes,
+            series.visibility === "PRIVATE",
+        );
+
+        console.log(`[seed] ${series.slug}`);
     }
 }
 
@@ -177,6 +473,10 @@ async function main() {
     await seedReferenceData();
 
     if (process.argv.includes("--demo")) {
+        if (process.env.NODE_ENV === "production") {
+            throw new Error("demo seeding is disabled in production.");
+        }
+
         await seedDemoSeries();
     }
 
