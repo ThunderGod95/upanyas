@@ -21,7 +21,11 @@ export interface FeaturedNovel {
     href: string;
 }
 
-export default function FeaturedNovels({ novels }: { novels: FeaturedNovel[] }) {
+export default function FeaturedNovels({
+    novels,
+}: {
+    novels: FeaturedNovel[];
+}) {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
 
@@ -47,7 +51,7 @@ export default function FeaturedNovels({ novels }: { novels: FeaturedNovel[] }) 
     return (
         <section
             aria-label="Featured novels"
-            className="site-container grid h-[calc(100dvh-4.5rem)] min-h-0 grid-rows-[minmax(0,1fr)_auto] gap-3 py-4 sm:gap-6 sm:py-7 lg:py-9"
+            className="site-container grid h-[calc(100dvh-4.5rem)] min-h-0 grid-rows-[minmax(0,1fr)_auto] gap-3 py-4 sm:gap-6 sm:py-7 lg:py-9 select-none"
         >
             <Carousel
                 setApi={setApi}
