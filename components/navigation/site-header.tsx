@@ -2,12 +2,12 @@ import { LogIn, Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
-import ThemeToggle from "@/components/theme-toggle";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/shadcn/input-group";
+import ThemeToggle from "@/components/theme-toggle";
 import { getSession } from "@/lib/auth/server/utils";
 
 import {
@@ -41,23 +41,25 @@ export default function SiteHeader() {
 
                 <div className="flex-1" />
 
-                <form role="search" action="/search">
-                    <InputGroup className="hidden h-8 w-[clamp(13rem,20vw,18rem)] xl:flex">
-                        <InputGroupInput
-                            type="search"
-                            name="q"
-                            aria-label="Search novels"
-                            placeholder="Search novels..."
-                            className="h-full"
-                        />
-                        <InputGroupAddon>
-                            <Search
-                                aria-hidden="true"
-                                className="size-4 text-muted-foreground"
+                <search>
+                    <form action="/search">
+                        <InputGroup className="hidden h-8 w-[clamp(13rem,20vw,18rem)] xl:flex">
+                            <InputGroupInput
+                                type="search"
+                                name="q"
+                                aria-label="Search novels"
+                                placeholder="Search novels..."
+                                className="h-full"
                             />
-                        </InputGroupAddon>
-                    </InputGroup>
-                </form>
+                            <InputGroupAddon>
+                                <Search
+                                    aria-hidden="true"
+                                    className="size-4 text-muted-foreground"
+                                />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </form>
+                </search>
 
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                     <ThemeToggle />
