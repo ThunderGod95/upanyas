@@ -5,20 +5,24 @@ import { Camera, Check, LoaderCircle, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
+import zod from "zod";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/shadcn/avatar";
 import { Button } from "@/components/shadcn/button";
 import { Input } from "@/components/shadcn/input";
 import { authClient } from "@/lib/auth/client";
 
-const profileSchema = z.object({
-    name: z
+const profileSchema = zod.object({
+    name: zod
         .string()
         .trim()
         .min(1, "Enter your display name.")
         .max(60, "Display name cannot exceed 60 characters."),
-    username: z
+    username: zod
         .string()
         .trim()
         .min(3, "Username must be at least 3 characters.")
@@ -29,7 +33,7 @@ const profileSchema = z.object({
         ),
 });
 
-type ProfileData = z.infer<typeof profileSchema>;
+type ProfileData = zod.infer<typeof profileSchema>;
 
 interface ProfileUser {
     name: string;
@@ -109,7 +113,7 @@ export default function ProfileEditor({
 
         const updates: { name?: string; username?: string } = {};
 
-        if (name != user.name) updates.name = name;
+        if (name !== user.name) updates.name = name;
         if (username !== user.username) updates.username = username;
 
         if (Object.keys(updates).length === 0) {

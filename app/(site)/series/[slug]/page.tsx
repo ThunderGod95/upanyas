@@ -234,13 +234,12 @@ async function ChapterSection({
 
 function SectionSkeleton({ title }: { title: string }) {
     return (
-        <section
-            role="status"
-            aria-label={`Loading ${title.toLowerCase()}`}
+        <output
+            aria-label={`loading ${title.toLowerCase()}`}
             className="space-y-5"
         >
             <h2 className="font-heading text-3xl">{title}</h2>
             <div className="h-48 animate-pulse rounded-lg bg-secondary" />
-        </section>
+        </output>
     );
 }

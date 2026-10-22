@@ -40,12 +40,11 @@ export default async function MeLayout({ children }: LayoutProps<"/user/me">) {
 
 function Loading() {
     return (
-        <div
-            role="status"
+        <output
             aria-label="Verifying your session"
             className="flex min-h-[50dvh] items-center justify-center"
         >
             <Spinner />
-        </div>
+        </output>
     );
 }

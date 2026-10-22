@@ -130,7 +130,7 @@ async function DiscoveryResults({
 
 function DiscoverySkeleton() {
     return (
-        <div role="status" aria-label="loading series">
+        <output aria-label="loading series">
             <div className="mb-10 h-4 w-32 animate-pulse rounded bg-secondary"></div>
 
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
@@ -142,6 +142,6 @@ function DiscoverySkeleton() {
                     </div>
                 ))}
             </div>
-        </div>
+        </output>
     );
 }

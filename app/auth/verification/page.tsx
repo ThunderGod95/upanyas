@@ -35,8 +35,7 @@ export default function VerificationPage() {
 
     if (!context) {
         return (
-            <div
-                role="status"
+            <output
                 className="h-64 animate-pulse rounded-xl bg-secondary/40"
                 aria-label="Loading verification details"
             />
