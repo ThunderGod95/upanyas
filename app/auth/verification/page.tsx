@@ -1,77 +1,89 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import VerificationPending from "@/components/auth/verification-pending";
 import { authClient } from "@/lib/auth/client";
+import { readPendingVerification } from "@/lib/auth/verification-context";
+
+type VerificationContext = {
+    email: string | null;
+    invalidLink: boolean;
+};
 
 export default function VerificationPage() {
-    const [email, setEmail] = useState("");
-    const [busy, setBusy] = useState(false);
-    const [message, setMessage] = useState("");
+    const [context, setContext] = useState<VerificationContext | null>(null);
 
-    async function resend(event: React.SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
+    useEffect(() => {
+        setContext({
+            email: readPendingVerification(),
+            invalidLink: new URLSearchParams(window.location.search).has(
+                "error",
+            ),
+        });
+    }, []);
 
-        if (busy) return;
+    if (!context) {
+        return (
+            <div
+                role="status"
+                className="h-64 animate-pulse rounded-xl bg-secondary/40"
+                aria-label="Loading verification details"
+            />
+        );
+    }
 
-        setBusy(true);
-        setMessage("");
+    if (!context.email) {
+        return (
+            <section className="auth-form space-y-7">
+                <div className="space-y-3">
+                    <h1 className="text-4xl font-heading">
+                        {context.invalidLink
+                            ? "Verification link expired."
+                            : "Verify your account."}
+                    </h1>
 
-        try {
-            const { error } = await authClient.sendVerificationEmail({
-                email: email.trim(),
-                callbackURL: "/user/me",
-            });
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                        {context.invalidLink
+                            ? "That verification link is no longer usable."
+                            : "We don't have a pending verification request in this browser tab."}{" "}
+                        Log in with your username and password. If your account
+                        still needs verification, we'll send a fresh link
+                        automatically.
+                    </p>
+                </div>
 
-            if (error) {
-                setMessage(error.message ?? "Unable to send verification email.");
-                return;
-            }
+                <Link
+                    href="/auth/login"
+                    className="inline-flex h-12 w-full items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                    Continue to login
+                </Link>
+            </section>
+        );
+    }
 
-            setMessage(
-                "If this address has an unverified account, a verification link has been sent.",
+    async function resend() {
+        if (!context?.email) return;
+
+        const { error } = await authClient.sendVerificationEmail({
+            email: context.email,
+            callbackURL: "/auth/verification",
+        });
+
+        if (error) {
+            throw new Error(
+                error.message ?? "Unable to send verification email.",
             );
-        } catch {
-            setMessage("Unable to send email. Please try again.");
-        } finally {
-            setBusy(false);
         }
     }
 
     return (
-        <div className="space-y-6">
-            <div className="space-y-3">
-                <h1 className="font-heading text-3xl">Check your inbox</h1>
-
-                <p className="text-sm text-muted-foreground">
-                    We've sent a verification link to your email address. Follow the link to
-                    activate your account.
-                </p>
-            </div>
-
-            <form onSubmit={resend} className="space-y-4">
-                <Input
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    disabled={busy}
-                />
-
-                <Button type="submit" variant="outline" disabled={busy} className="w-full">
-                    {busy ? "Sending..." : "Resend verification email"}
-                </Button>
-            </form>
-
-            {message && (
-                <p role="status" className="text-sm text-muted-foreground">
-                    {message}
-                </p>
-            )}
-        </div>
+        <VerificationPending
+            email={context.email}
+            invalidLink={context.invalidLink}
+            onResend={resend}
+        />
     );
 }
