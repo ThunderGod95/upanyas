@@ -24,6 +24,9 @@ model User {
   authorProfile     Author?
   translatorProfile Translator?
 
+  chapterDraftEdits ChapterDraft[]    @relation("DraftLastEditor")
+  chapterRevisions  ChapterRevision[] @relation("RevisionCreator")
+
   @@map("user")
 }
 
@@ -126,6 +129,9 @@ model Series {
   genres Genre[]
   tags   Tag[]
 
+  volumes  Volume[]
+  chapters Chapter[]
+
   featured FeaturedSeries?
 
   @@index([originalStatus, translationStatus, visibility, publishedAt(sort: Desc)])
@@ -215,4 +221,105 @@ model FeaturedSeries {
 
   @@index([position])
   @@map("featured_series")
+}
+
+model Volume {
+  id          String   @id @default(cuid())
+  seriesId    String
+  title       String
+  description String?
+  position    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  series   Series    @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  chapters Chapter[]
+
+  @@unique([seriesId, position])
+  @@map("volume")
+}
+
+model Chapter {
+  id               String    @id @default(cuid())
+  seriesId         String
+  volumeId         String?
+  position         Int
+  numberLabel      String?
+  firstPublishedAt DateTime?
+  archivedAt       DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  series Series  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  volume Volume? @relation(fields: [volumeId], references: [id], onDelete: SetNull)
+
+  draft       ChapterDraft?
+  revisions   ChapterRevision[]
+  publication ChapterPublication?
+
+  @@unique([seriesId, position])
+  @@index([volumeId, position])
+  @@map("chapter")
+}
+
+model ChapterDraft {
+  chapterId      String  @id
+  baseRevisionId String?
+  title          String
+  content        Json
+  authorNote     String?
+  translatorNote String?
+  version        Int     @default(1)
+
+  lastEditedById String?
+  updatedAt      DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  baseRevision ChapterRevision? @relation("DraftBaseRevision", fields: [baseRevisionId], references: [id], onDelete: SetNull)
+
+  lastEditedBy User? @relation("DraftLastEditor", fields: [lastEditedById], references: [id], onDelete: SetNull)
+
+  @@map("chapter_draft")
+}
+
+model ChapterRevision {
+  id             String  @id @default(cuid())
+  chapterId      String
+  revisionNumber Int
+  title          String
+  content        Json
+  authorNote     String?
+  translatorNote String?
+
+  wordCount      Int     @default(0)
+  characterCount Int     @default(0)
+  changeSummary  String?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdBy User? @relation("RevisionCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  basedDrafts       ChapterDraft[]      @relation("DraftBaseRevision")
+  activePublication ChapterPublication?
+
+  @@unique([chapterId, revisionNumber])
+  @@index([chapterId, createdAt(sort: Desc)])
+  @@map("chapter_revision")
+}
+
+model ChapterPublication {
+  chapterId   String   @id
+  revisionId  String   @unique
+  publishedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  revision ChapterRevision @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+
+  @@map("chapter_publication")
 }
