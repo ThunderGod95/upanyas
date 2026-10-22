@@ -30,7 +30,7 @@ export default function SiteHeader() {
                 <Link
                     href="/"
                     aria-label="NovelUpdates home"
-                    className="shrink-0 font-heading text-[2rem] leading-none tracking-[-0.07em] text-foreground"
+                    className="shrink-0 font-heading text-3xl leading-none tracking-tight text-foreground"
                 >
                     Upanyas<span className="text-ornament">.</span>
                 </Link>
