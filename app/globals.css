@@ -405,9 +405,5 @@
         .auth-panel {
             clip-path: polygon(0 0, 100% 0, calc(100% - 7rem) 100%, 0 100%);
         }
-
-        .auth-scroll {
-            width: calc(60% - 7rem);
-        }
     }
 }

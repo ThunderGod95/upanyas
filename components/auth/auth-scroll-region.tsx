@@ -20,7 +20,7 @@ export default function AuthScrollRegion({
     return (
         <main
             ref={ref}
-            className="auth-scroll relative z-10 h-full w-full overflow-y-auto overscroll-contain"
+            className="auth-scroll relative min-h-0 w-full flex-1 overflow-y-auto overscroll-contain"
         >
             {children}
         </main>

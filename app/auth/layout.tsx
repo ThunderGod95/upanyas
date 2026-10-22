@@ -28,20 +28,22 @@ export default async function AuthLayout({ children }: LayoutProps<"/auth">) {
                 className="auth-panel pointer-events-none absolute inset-y-0 left-0 w-full lg:w-[60%]"
             />
 
-            <AuthScrollRegion>
-                <div className="flex min-h-full items-center px-6 py-12 sm:px-12 lg:pr-4 lg:pl-[clamp(3.5rem,9vw,10rem)]">
-                    <div className="w-full max-w-105">
-                        <Link
-                            href="/"
-                            className="mb-14 inline-flex items-baseline font-heading text-[2rem] leading-none tracking-[-0.06em] text-foreground"
-                        >
-                            Upanyas<span className="text-ornament">.</span>
-                        </Link>
+            <div className="relative z-10 flex h-full min-h-0 flex-col lg:w-[calc(60%-7rem)]">
+                <header className="shrink-0 px-6 pt-8 sm:px-12 sm:pt-10 lg:pr-4 lg:pl-[clamp(3.5rem,9vw,10rem)]">
+                    <Link
+                        href="/"
+                        className="inline-flex items-baseline font-heading text-[1.375rem] leading-none tracking-tighter text-foreground/75 transition-colors hover:text-foreground"
+                    >
+                        Upanyas<span className="text-ornament">.</span>
+                    </Link>
+                </header>
 
-                        {children}
+                <AuthScrollRegion>
+                    <div className="flex min-h-full items-center px-6 py-8 sm:px-12 lg:pr-4 lg:pl-[clamp(3.5rem,9vw,10rem)]">
+                        <div className="w-full max-w-105">{children}</div>
                     </div>
-                </div>
-            </AuthScrollRegion>
+                </AuthScrollRegion>
+            </div>
         </div>
     );
 }
