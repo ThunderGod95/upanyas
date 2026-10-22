@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -45,16 +45,10 @@ export default function VerificationPending({
         try {
             await onResend();
 
-            setMessage(
-                "If your account still needs verification, another link is on its way.",
-            );
+            setMessage("If your account still needs verification, another link is on its way.");
             setCooldown(60);
         } catch (cause) {
-            setError(
-                cause instanceof Error
-                    ? cause.message
-                    : "Unable to send another email.",
-            );
+            setError(cause instanceof Error ? cause.message : "Unable to send another email.");
         } finally {
             setBusy(false);
         }
@@ -63,10 +57,8 @@ export default function VerificationPending({
     return (
         <section className="auth-form space-y-7">
             <div className="space-y-3">
-                <h1 className="text-4xl font-heading">
-                    {invalidLink
-                        ? "That link is no longer valid."
-                        : "Check your inbox."}
+                <h1 className="font-heading text-4xl">
+                    {invalidLink ? "That link is no longer valid." : "Check your inbox."}
                 </h1>
 
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -77,18 +69,17 @@ export default function VerificationPending({
             </div>
 
             <div className="rounded-xl border border-border bg-card px-5 py-4">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                     {email ? "Email address" : "Account"}
                 </p>
 
-                <p className="mt-1 break-all text-sm font-semibold text-foreground">
+                <p className="mt-1 text-sm font-semibold break-all text-foreground">
                     {email ?? `@${username}`}
                 </p>
 
                 {!email && (
                     <p className="mt-2 text-xs text-muted-foreground">
-                        The link was sent to the email address associated with
-                        this account.
+                        The link was sent to the email address associated with this account.
                     </p>
                 )}
             </div>

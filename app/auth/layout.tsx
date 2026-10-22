@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { authServer } from "@/lib/auth/server";
 import AuthScrollRegion from "@/components/auth/auth-scroll-region";
+import { authServer } from "@/lib/auth/server";
 
 export const instant = false;
 
@@ -18,10 +18,7 @@ export default async function AuthLayout({ children }: LayoutProps<"/auth">) {
 
     return (
         <div className="auth-shell relative isolate h-dvh overflow-hidden">
-            <div
-                aria-hidden="true"
-                className="auth-art absolute inset-0 hidden lg:block"
-            />
+            <div aria-hidden="true" className="auth-art absolute inset-0 hidden lg:block" />
 
             <div
                 aria-hidden="true"

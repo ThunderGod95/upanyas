@@ -18,9 +18,7 @@ export default function VerificationPage() {
     useEffect(() => {
         setContext({
             email: readPendingVerification(),
-            invalidLink: new URLSearchParams(window.location.search).has(
-                "error",
-            ),
+            invalidLink: new URLSearchParams(window.location.search).has("error"),
         });
     }, []);
 
@@ -38,7 +36,7 @@ export default function VerificationPage() {
         return (
             <section className="auth-form space-y-7">
                 <div className="space-y-3">
-                    <h1 className="text-4xl font-heading">
+                    <h1 className="font-heading text-4xl">
                         {context.invalidLink
                             ? "Verification link expired."
                             : "Verify your account."}
@@ -48,9 +46,8 @@ export default function VerificationPage() {
                         {context.invalidLink
                             ? "That verification link is no longer usable."
                             : "We don't have a pending verification request in this browser tab."}{" "}
-                        Log in with your username and password. If your account
-                        still needs verification, we'll send a fresh link
-                        automatically.
+                        Log in with your username and password. If your account still needs
+                        verification, we'll send a fresh link automatically.
                     </p>
                 </div>
 
@@ -73,9 +70,7 @@ export default function VerificationPage() {
         });
 
         if (error) {
-            throw new Error(
-                error.message ?? "Unable to send verification email.",
-            );
+            throw new Error(error.message ?? "Unable to send verification email.");
         }
     }
 
