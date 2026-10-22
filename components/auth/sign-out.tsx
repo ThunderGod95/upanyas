@@ -6,7 +6,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/client";
 
-export default function SignOutButton({ variant = "default" }: { variant: "navbar" | "default" }) {
+export default function SignOutButton({
+    variant = "default",
+}: {
+    variant: "navbar" | "default";
+}) {
     const router = useRouter();
 
     const isNavbar = variant === "navbar";

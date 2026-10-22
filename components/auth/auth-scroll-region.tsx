@@ -3,7 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 
-export default function AuthScrollRegion({ children }: { children: React.ReactNode }) {
+export default function AuthScrollRegion({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const pathname = usePathname();
     const ref = useRef<HTMLElement>(null);
 

@@ -63,7 +63,10 @@ const demoSeries = [
         originalStatus: "ONGOING",
         translationStatus: "ONGOING",
         originalLanguage: "CHINESE",
-        volumes: ["Azure Profundity in the River", "The Great Whale Beneath the Waning Moon"],
+        volumes: [
+            "Azure Profundity in the River",
+            "The Great Whale Beneath the Waning Moon",
+        ],
     },
     {
         title: "Journey through Myriad Paths",
@@ -104,7 +107,13 @@ const demoSeries = [
             slug: "demo-author-three",
         },
         genres: ["fantasy", "xianxia", "romance"],
-        tags: ["cultivation", "transmigration", "weak-to-strong", "academy", "martial-arts"],
+        tags: [
+            "cultivation",
+            "transmigration",
+            "weak-to-strong",
+            "academy",
+            "martial-arts",
+        ],
         visibility: "PUBLIC",
         originalStatus: "ONGOING",
         translationStatus: "ONGOING",
@@ -116,7 +125,8 @@ const demoSeries = [
         slug: "demo-unlisted",
         coverUrl: null,
         shortDescription: "A series for testing direct-link access.",
-        longDescription: "Synthetic content for verifying unlisted series navigation.",
+        longDescription:
+            "Synthetic content for verifying unlisted series navigation.",
         author: {
             name: "Demo Unlisted Author",
             slug: "demo-author-unlisted",
@@ -134,7 +144,8 @@ const demoSeries = [
         slug: "demo-private",
         coverUrl: null,
         shortDescription: "A private series for access-control testing.",
-        longDescription: "Synthetic content for testing private series and drafts.",
+        longDescription:
+            "Synthetic content for testing private series and drafts.",
         author: {
             name: "Demo Private Author",
             slug: "demo-author-private",
@@ -230,10 +241,13 @@ async function seedDemoChapters(
         // Private series contain drafts only.
         const kind = privateSeries ? "draft" : fixture.kind;
 
-        const volumeId = fixture.volume === null ? null : volumes[fixture.volume - 1]!.id;
+        const volumeId =
+            fixture.volume === null ? null : volumes[fixture.volume - 1]!.id;
 
         const firstPublishedAt =
-            kind === "published" || kind === "published-with-draft" || kind === "archived"
+            kind === "published" ||
+            kind === "published-with-draft" ||
+            kind === "archived"
                 ? DEMO_DATE
                 : null;
 
@@ -251,7 +265,10 @@ async function seedDemoChapters(
                 position: fixture.position,
                 numberLabel: fixture.numberLabel,
                 firstPublishedAt,
-                archivedAt: kind === "archived" ? new Date("2026-10-20T12:00:00.000Z") : null,
+                archivedAt:
+                    kind === "archived"
+                        ? new Date("2026-10-20T12:00:00.000Z")
+                        : null,
             },
         });
 
@@ -326,7 +343,9 @@ async function seedDemoChapters(
                     chapterId: chapter.id,
                     baseRevisionId,
                     title: fixture.title,
-                    content: documentFor(`${text} Unpublished working changes.`),
+                    content: documentFor(
+                        `${text} Unpublished working changes.`,
+                    ),
                     translatorNote: "Synthetic development draft.",
                     version: kind === "draft" ? 1 : 2,
                     lastEditedById: DEMO_USER_ID,

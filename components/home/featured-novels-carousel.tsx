@@ -21,7 +21,11 @@ export interface FeaturedNovel {
     href: string;
 }
 
-export default function FeaturedNovels({ novels }: { novels: FeaturedNovel[] }) {
+export default function FeaturedNovels({
+    novels,
+}: {
+    novels: FeaturedNovel[];
+}) {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
 

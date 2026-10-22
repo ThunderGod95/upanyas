@@ -18,12 +18,18 @@ const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
 export default function VerificationPage() {
-    const hydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+    const hydrated = useSyncExternalStore(
+        subscribe,
+        getClientSnapshot,
+        getServerSnapshot,
+    );
 
     const context: VerificationContext | null = hydrated
         ? {
               email: readPendingVerification(),
-              invalidLink: new URLSearchParams(window.location.search).has("error"),
+              invalidLink: new URLSearchParams(window.location.search).has(
+                  "error",
+              ),
           }
         : null;
 
@@ -51,8 +57,9 @@ export default function VerificationPage() {
                         {context.invalidLink
                             ? "That verification link is no longer usable."
                             : "We don't have a pending verification request in this browser tab."}{" "}
-                        Log in with your username and password. If your account still needs
-                        verification, we'll send a fresh link automatically.
+                        Log in with your username and password. If your account
+                        still needs verification, we'll send a fresh link
+                        automatically.
                     </p>
                 </div>
 
@@ -75,7 +82,9 @@ export default function VerificationPage() {
         });
 
         if (error) {
-            throw new Error(error.message ?? "Unable to send verification email.");
+            throw new Error(
+                error.message ?? "Unable to send verification email.",
+            );
         }
     }
 

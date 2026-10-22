@@ -50,7 +50,10 @@ export const authServer = betterAuth({
                             text: `A request was made to change your email to ${newEmail}.\n\nApprove this change:\n${url}\n\nIf you didn't request this, do not approve it.`,
                         });
                     } catch (error) {
-                        console.error("email change confirmation failed:", error);
+                        console.error(
+                            "email change confirmation failed:",
+                            error,
+                        );
                     }
                 });
             },
@@ -66,7 +69,8 @@ export const authServer = betterAuth({
                 "image" in ctx.body
             ) {
                 throw new APIError("FORBIDDEN", {
-                    message: "use the avatar upload endpoint to change your image.",
+                    message:
+                        "use the avatar upload endpoint to change your image.",
                 });
             }
         }),

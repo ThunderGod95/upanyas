@@ -7,7 +7,11 @@
                 { "language_server": { "name": "oxfmt" } },
                 { "code_action": "source.fixAll.oxc" }
             ],
-            "language_servers": ["!eslint", "!typescript-language-server", "..."]
+            "language_servers": [
+                "!eslint",
+                "!typescript-language-server",
+                "..."
+            ]
         },
         "TypeScript": {
             "format_on_save": "on",
@@ -15,7 +19,11 @@
                 { "language_server": { "name": "oxfmt" } },
                 { "code_action": "source.fixAll.oxc" }
             ],
-            "language_servers": ["!eslint", "!typescript-language-server", "..."]
+            "language_servers": [
+                "!eslint",
+                "!typescript-language-server",
+                "..."
+            ]
         },
         "JavaScript": {
             "format_on_save": "on",
@@ -23,7 +31,11 @@
                 { "language_server": { "name": "oxfmt" } },
                 { "code_action": "source.fixAll.oxc" }
             ],
-            "language_servers": ["!eslint", "!typescript-language-server", "..."]
+            "language_servers": [
+                "!eslint",
+                "!typescript-language-server",
+                "..."
+            ]
         },
         "CSS": {
             "format_on_save": "on",

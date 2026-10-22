@@ -45,10 +45,16 @@ export default function VerificationPending({
         try {
             await onResend();
 
-            setMessage("If your account still needs verification, another link is on its way.");
+            setMessage(
+                "If your account still needs verification, another link is on its way.",
+            );
             setCooldown(60);
         } catch (cause) {
-            setError(cause instanceof Error ? cause.message : "Unable to send another email.");
+            setError(
+                cause instanceof Error
+                    ? cause.message
+                    : "Unable to send another email.",
+            );
         } finally {
             setBusy(false);
         }
@@ -58,7 +64,9 @@ export default function VerificationPending({
         <section className="auth-form space-y-7">
             <div className="space-y-3">
                 <h1 className="font-heading text-4xl">
-                    {invalidLink ? "That link is no longer valid." : "Check your inbox."}
+                    {invalidLink
+                        ? "That link is no longer valid."
+                        : "Check your inbox."}
                 </h1>
 
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -79,7 +87,8 @@ export default function VerificationPending({
 
                 {!email && (
                     <p className="mt-2 text-xs text-muted-foreground">
-                        The link was sent to the email address associated with this account.
+                        The link was sent to the email address associated with
+                        this account.
                     </p>
                 )}
             </div>

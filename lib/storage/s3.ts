@@ -26,14 +26,21 @@ export function avatarPublicUrl(key: string): string {
     return `${baseUrl}/${path}`;
 }
 
-export function ownedAvatarKey(userId: string, imageUrl: string | null): string | null {
+export function ownedAvatarKey(
+    userId: string,
+    imageUrl: string | null,
+): string | null {
     const prefix = `${baseUrl}/${encodeURIComponent(userId)}/`;
 
     if (!imageUrl?.startsWith(prefix)) return null;
 
     const filename = imageUrl.slice(prefix.length);
 
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.webp$/i.test(filename)) {
+    if (
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.webp$/i.test(
+            filename,
+        )
+    ) {
         return null;
     }
 

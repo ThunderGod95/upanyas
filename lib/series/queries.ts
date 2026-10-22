@@ -20,7 +20,11 @@ export async function getDiscoverableSeries(page: number) {
     const [items, total] = await Promise.all([
         prisma.series.findMany({
             where: { visibility: "PUBLIC" },
-            orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }, { id: "asc" }],
+            orderBy: [
+                { publishedAt: "desc" },
+                { createdAt: "desc" },
+                { id: "asc" },
+            ],
             skip: (page - 1) * SERIES_PAGE_SIZE,
             take: SERIES_PAGE_SIZE,
             select: {
@@ -90,7 +94,10 @@ export const getVisibleSeries = cache(async (slug: string) => {
 /**
  * Visible volumes containing at least one published chapter.
  */
-export async function getPublishedVolumes(seriesId: string, orderBy: "asc" | "desc" = "asc") {
+export async function getPublishedVolumes(
+    seriesId: string,
+    orderBy: "asc" | "desc" = "asc",
+) {
     "use cache";
 
     cacheLife("minutes");

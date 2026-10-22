@@ -26,7 +26,10 @@ const signupSchema = z.object({
         .string()
         .min(3, "Username must be at least 3 characters.")
         .max(30, "Username cannot exceed 30 characters.")
-        .regex(/^[a-zA-Z0-9_.]+$/, "Only letters, numbers, underscores, and dots are allowed."),
+        .regex(
+            /^[a-zA-Z0-9_.]+$/,
+            "Only letters, numbers, underscores, and dots are allowed.",
+        ),
     email: z.email(),
     password: z
         .string()
@@ -65,7 +68,10 @@ export default function SignupForm() {
             });
 
             // Ignore responses for outdated values or requests.
-            if (checkId !== usernameCheckId.current || form.getValues("username") !== username) {
+            if (
+                checkId !== usernameCheckId.current ||
+                form.getValues("username") !== username
+            ) {
                 return;
             }
 
@@ -76,7 +82,9 @@ export default function SignupForm() {
                     type: "availability",
                     message: "This username is already taken.",
                 });
-            } else if (form.getFieldState("username").error?.type === "availability") {
+            } else if (
+                form.getFieldState("username").error?.type === "availability"
+            ) {
                 form.clearErrors("username");
             }
         } catch {
@@ -96,7 +104,9 @@ export default function SignupForm() {
 
             if (error) {
                 form.setError("root", {
-                    message: error.message ?? "Unable to create account. Please try again.",
+                    message:
+                        error.message ??
+                        "Unable to create account. Please try again.",
                 });
                 return;
             }
@@ -111,13 +121,17 @@ export default function SignupForm() {
     };
 
     return (
-        <form id="signup-form" className="auth-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+            id="signup-form"
+            className="auth-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+        >
             <FieldGroup>
                 <FieldSet>
                     <FieldLegend>Sign up</FieldLegend>
                     <FieldDescription>
-                        Join our community to discover new novels, track your reading progress, and
-                        create personalized reading lists.
+                        Join our community to discover new novels, track your
+                        reading progress, and create personalized reading lists.
                     </FieldDescription>
 
                     <FieldGroup>
@@ -126,7 +140,9 @@ export default function SignupForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>
+                                        Username
+                                    </FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
@@ -141,7 +157,8 @@ export default function SignupForm() {
                                             field.onChange(event);
 
                                             if (
-                                                form.getFieldState("username").error?.type ===
+                                                form.getFieldState("username")
+                                                    .error?.type ===
                                                 "availability"
                                             ) {
                                                 form.clearErrors("username");
@@ -153,10 +170,13 @@ export default function SignupForm() {
                                         }}
                                     />
                                     <FieldDescription>
-                                        3–30 characters. Letters, numbers, underscores, and dots.
+                                        3–30 characters. Letters, numbers,
+                                        underscores, and dots.
                                     </FieldDescription>
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -167,7 +187,9 @@ export default function SignupForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>
+                                        Email
+                                    </FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
@@ -178,7 +200,9 @@ export default function SignupForm() {
                                         disabled={isSubmitting}
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -189,7 +213,9 @@ export default function SignupForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>
+                                        Password
+                                    </FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
@@ -203,7 +229,9 @@ export default function SignupForm() {
                                         Must be 8–16 characters long.
                                     </FieldDescription>
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -211,15 +239,24 @@ export default function SignupForm() {
                     </FieldGroup>
                 </FieldSet>
 
-                {errors.root && <FieldError role="alert">{errors.root.message}</FieldError>}
+                {errors.root && (
+                    <FieldError role="alert">{errors.root.message}</FieldError>
+                )}
 
-                <Button type="submit" disabled={isSubmitting} className="w-full">
+                <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full"
+                >
                     {isSubmitting ? "Creating account..." : "Create account"}
                 </Button>
 
                 <p className="text-center text-sm text-muted-foreground">
                     Already have an account?{" "}
-                    <Link href="/auth/login" className="font-medium text-primary hover:underline">
+                    <Link
+                        href="/auth/login"
+                        className="font-medium text-primary hover:underline"
+                    >
                         Log in
                     </Link>
                 </p>

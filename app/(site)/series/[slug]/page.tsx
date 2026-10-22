@@ -21,8 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     return {
         title: `${series.title} | Upanyas`,
-        description: series.shortDescription ?? series.longDescription.slice(0, 160),
-        robots: series.visibility === "UNLISTED" ? { index: false, follow: false } : undefined,
+        description:
+            series.shortDescription ?? series.longDescription.slice(0, 160),
+        robots:
+            series.visibility === "UNLISTED"
+                ? { index: false, follow: false }
+                : undefined,
     };
 }
 
@@ -49,11 +53,14 @@ export default async function SeriesPage({ params, searchParams }: Props) {
                 </div>
 
                 <div className="min-w-0 space-y-5">
-                    <h1 className="editorial-heading text-4xl sm:text-5xl">{series.title}</h1>
+                    <h1 className="editorial-heading text-4xl sm:text-5xl">
+                        {series.title}
+                    </h1>
 
                     <p className="text-sm text-muted-foreground">
-                        {series.authors.map(({ author }) => author.name).join(", ") ||
-                            "Unknown author"}
+                        {series.authors
+                            .map(({ author }) => author.name)
+                            .join(", ") || "Unknown author"}
                     </p>
 
                     <div className="flex flex-wrap gap-2">
@@ -73,12 +80,20 @@ export default async function SeriesPage({ params, searchParams }: Props) {
 
                     <dl className="grid gap-3 text-sm sm:grid-cols-2">
                         <div>
-                            <dt className="text-muted-foreground">Status in COO</dt>
-                            <dd>{series.originalStatus.replaceAll("_", " ")}</dd>
+                            <dt className="text-muted-foreground">
+                                Status in COO
+                            </dt>
+                            <dd>
+                                {series.originalStatus.replaceAll("_", " ")}
+                            </dd>
                         </div>
                         <div>
-                            <dt className="text-muted-foreground">Translation Status</dt>
-                            <dd>{series.translationStatus.replaceAll("_", " ")}</dd>
+                            <dt className="text-muted-foreground">
+                                Translation Status
+                            </dt>
+                            <dd>
+                                {series.translationStatus.replaceAll("_", " ")}
+                            </dd>
                         </div>
                     </dl>
                 </div>
@@ -107,7 +122,9 @@ async function VolumeSection({ seriesId }: { seriesId: string }) {
             <h2 className="font-heading text-3xl">Volumes</h2>
 
             {volumes.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No published volumes yet.</p>
+                <p className="text-sm text-muted-foreground">
+                    No published volumes yet.
+                </p>
             ) : (
                 <div className="divide-y divide-border rounded-lg border border-border">
                     {volumes.map((volume) => (
@@ -141,7 +158,9 @@ async function ChapterSection({
     const params = await searchParams;
     const requestedPage = Number(params.chapterPage ?? 1);
     const page =
-        Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= 1000
+        Number.isSafeInteger(requestedPage) &&
+        requestedPage > 0 &&
+        requestedPage <= 1000
             ? requestedPage
             : 1;
 
@@ -153,19 +172,24 @@ async function ChapterSection({
         <section className="space-y-5">
             <div className="flex items-baseline justify-between">
                 <h2 className="font-heading text-3xl">Chapters</h2>
-                <span className="text-sm text-muted-foreground">{total} published</span>
+                <span className="text-sm text-muted-foreground">
+                    {total} published
+                </span>
             </div>
 
             {total === 0 ? (
-                <p className="text-sm text-muted-foreground">No published chapters yet.</p>
+                <p className="text-sm text-muted-foreground">
+                    No published chapters yet.
+                </p>
             ) : (
                 <>
                     <ol className="divide-y divide-border rounded-lg border border-border">
                         {items.map((chapter) => (
                             <li key={chapter.id} className="px-5 py-4">
                                 <p className="text-sm font-medium">
-                                    {chapter.numberLabel ?? `Chapter ${chapter.position}`} -{" "}
-                                    {chapter.publication?.revision.title}
+                                    {chapter.numberLabel ??
+                                        `Chapter ${chapter.position}`}{" "}
+                                    - {chapter.publication?.revision.title}
                                 </p>
 
                                 {chapter.volume && (
@@ -181,7 +205,10 @@ async function ChapterSection({
                         className="flex items-center justify-center gap-6"
                     >
                         {page > 1 && (
-                            <Link href={`/series/${slug}?chapterPage=${page - 1}`} scroll={false}>
+                            <Link
+                                href={`/series/${slug}?chapterPage=${page - 1}`}
+                                scroll={false}
+                            >
                                 Previous
                             </Link>
                         )}
@@ -191,7 +218,10 @@ async function ChapterSection({
                         </span>
 
                         {page < totalPages && (
-                            <Link href={`/series/${slug}?chapterPage=${page + 1}`} scroll={false}>
+                            <Link
+                                href={`/series/${slug}?chapterPage=${page + 1}`}
+                                scroll={false}
+                            >
                                 Next
                             </Link>
                         )}
@@ -204,7 +234,11 @@ async function ChapterSection({
 
 function SectionSkeleton({ title }: { title: string }) {
     return (
-        <section role="status" aria-label={`Loading ${title.toLowerCase()}`} className="space-y-5">
+        <section
+            role="status"
+            aria-label={`Loading ${title.toLowerCase()}`}
+            className="space-y-5"
+        >
             <h2 className="font-heading text-3xl">{title}</h2>
             <div className="h-48 animate-pulse rounded-lg bg-secondary" />
         </section>
