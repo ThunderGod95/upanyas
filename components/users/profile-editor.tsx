@@ -7,11 +7,10 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/client";
-
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 const profileSchema = z.object({
     name: z
