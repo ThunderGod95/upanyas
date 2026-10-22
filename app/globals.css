@@ -57,7 +57,8 @@
     --ornament: #8a6948;
     --selection: #e8cdd5;
 
-    --surface-shadow: 0 1px 2px rgb(33 22 29 / 0.025), 0 12px 36px rgb(33 22 29 / 0.045);
+    --surface-shadow:
+        0 1px 2px rgb(33 22 29 / 0.025), 0 12px 36px rgb(33 22 29 / 0.045);
 }
 
 /* ---------------------------------------
@@ -193,10 +194,6 @@
     --shadow-elegant: var(--surface-shadow);
 }
 
-/* ---------------------------------------
-   Base typography and interaction
---------------------------------------- */
-
 @layer base {
     * {
         @apply border-border outline-ring/50;
@@ -204,13 +201,11 @@
 
     html {
         @apply font-sans antialiased;
-        scroll-behavior: smooth;
     }
 
     body {
         @apply bg-background text-foreground;
         min-height: 100dvh;
-        font-size: 0.9375rem;
         line-height: 1.6;
         letter-spacing: -0.01em;
     }
@@ -275,14 +270,6 @@
         text-wrap: balance;
     }
 
-    .eyebrow {
-        color: var(--ornament);
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-    }
-
     /* Site header */
 
     .site-header {
@@ -318,6 +305,13 @@
 
     .auth-panel {
         background: var(--background);
+    }
+
+    .auth-scroll {
+        scrollbar-gutter: stable;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, var(--ornament) 40%, transparent)
+            transparent;
     }
 
     /* Authentication forms */
@@ -410,6 +404,10 @@
     @media (min-width: 64rem) {
         .auth-panel {
             clip-path: polygon(0 0, 100% 0, calc(100% - 7rem) 100%, 0 100%);
+        }
+
+        .auth-scroll {
+            width: calc(60% - 7rem);
         }
     }
 }
