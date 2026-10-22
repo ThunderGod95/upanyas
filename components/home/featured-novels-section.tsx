@@ -11,6 +11,9 @@ export default async function FeaturedNovelsSection() {
     cacheTag("home:featured");
 
     const featured = await prisma.featuredSeries.findMany({
+        where: {
+            series: { visibility: "PUBLIC" },
+        },
         orderBy: [{ position: "asc" }, { seriesId: "asc" }],
         take: 5,
         select: {

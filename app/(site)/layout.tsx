@@ -5,7 +5,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <>
             <SiteHeader />
 
-            <main id="main-content" className="min-h-[calc(100dvh-4.5rem)] min-w-0">
+            <main id="main-content" className="min-h-[calc(100dvh-(4.5rem + 0.8px))] min-w-0">
                 {children}
             </main>
         </>
