@@ -7,7 +7,7 @@ import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@/components/shadcn/input-group";
 import { getSession } from "@/lib/auth/server/utils";
 
 import {

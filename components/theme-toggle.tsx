@@ -9,7 +9,7 @@ import {
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/shadcn/dropdown-menu";
 
 export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();

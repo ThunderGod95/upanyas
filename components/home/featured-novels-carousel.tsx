@@ -10,7 +10,7 @@ import {
     CarouselContent,
     CarouselItem,
     type CarouselApi,
-} from "@/components/ui/carousel";
+} from "@/components/shadcn/carousel";
 import { cn } from "@/lib/ui/utils";
 
 export interface FeaturedNovel {

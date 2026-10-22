@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import {
     Field,
     FieldDescription,
@@ -16,8 +16,8 @@ import {
     FieldLabel,
     FieldLegend,
     FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/shadcn/field";
+import { Input } from "@/components/shadcn/input";
 import { authClient } from "@/lib/auth/client";
 import { savePendingVerification } from "@/lib/auth/verification-context";
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import AuthenticatedContent from "@/components/authenticated-content";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/shadcn/spinner";
 
 export default async function MeLayout({ children }: LayoutProps<"/user/me">) {
     return (

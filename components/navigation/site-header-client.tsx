@@ -13,8 +13,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
+import { Button } from "@/components/shadcn/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,7 +22,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/shadcn/dropdown-menu";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/ui/utils";
 
