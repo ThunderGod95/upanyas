@@ -1,3 +1,4 @@
+import AccountSecurity from "@/components/users/account-security";
 import ProfileEditor from "@/components/users/profile-editor";
 import { requireSession } from "@/lib/auth/server/utils";
 
@@ -11,15 +12,19 @@ export default async function MePage() {
     }).format(new Date(user.createdAt));
 
     return (
-        <ProfileEditor
-            user={{
-                name: user.name,
-                username: user.username ?? "",
-                email: user.email,
-                emailVerified: user.emailVerified,
-                image: user.image ?? null,
-            }}
-            memberSince={memberSince}
-        />
+        <div>
+            <ProfileEditor
+                user={{
+                    name: user.name,
+                    username: user.username ?? "",
+                    image: user.image ?? null,
+                }}
+                memberSince={memberSince}
+            />
+            <AccountSecurity
+                email={user.email}
+                emailVerified={user.emailVerified}
+            />
+        </div>
     );
 }

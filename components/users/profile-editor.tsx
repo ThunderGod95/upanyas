@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Camera, Check, LoaderCircle, Trash } from "lucide-react";
+import { Camera, LoaderCircle, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import {
 } from "@/components/shadcn/avatar";
 import { Button } from "@/components/shadcn/button";
 import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import { authClient } from "@/lib/auth/client";
 
 const profileSchema = zod.object({
@@ -38,8 +39,6 @@ type ProfileData = zod.infer<typeof profileSchema>;
 interface ProfileUser {
     name: string;
     username: string;
-    email: string;
-    emailVerified: boolean;
     image: string | null;
 }
 
@@ -309,12 +308,7 @@ export default function ProfileEditor({
             <form onSubmit={form.handleSubmit(saveProfile)}>
                 <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
                     <div className="pt-1">
-                        <label
-                            htmlFor="profile-name"
-                            className="text-sm font-medium"
-                        >
-                            Display name
-                        </label>
+                        <Label htmlFor="profile-name">Display name</Label>
                     </div>
 
                     <div className="max-w-md space-y-2">
@@ -324,7 +318,6 @@ export default function ProfileEditor({
                             placeholder="Your display name"
                             aria-invalid={!!errors.name}
                             disabled={isSubmitting}
-                            className="h-11 border-input bg-card px-3.5 shadow-none"
                             {...form.register("name", {
                                 onChange: () => setSuccess(false),
                             })}
@@ -343,12 +336,7 @@ export default function ProfileEditor({
 
                 <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
                     <div className="pt-1">
-                        <label
-                            htmlFor="profile-username"
-                            className="text-sm font-medium"
-                        >
-                            Username
-                        </label>
+                        <Label htmlFor="profile-username">Username</Label>
                     </div>
 
                     <div className="max-w-md space-y-2">
@@ -360,7 +348,6 @@ export default function ProfileEditor({
                             spellCheck={false}
                             aria-invalid={!!errors.username}
                             disabled={isSubmitting}
-                            className="h-11 border-input bg-card px-3.5 shadow-none"
                             onChange={(event) => {
                                 ++usernameCheckId.current;
                                 usernameField.onChange(event);
@@ -395,33 +382,6 @@ export default function ProfileEditor({
                     </div>
                 </div>
 
-                <div className="grid gap-4 border-b border-border py-8 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
-                    <p className="pt-1 text-sm font-medium">Email address</p>
-
-                    <div className="min-w-0 space-y-2">
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                            <span className="text-sm break-all text-foreground">
-                                {user.email}
-                            </span>
-
-                            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                                {user.emailVerified ? (
-                                    <>
-                                        <Check className="size-3.5" />
-                                        Verified
-                                    </>
-                                ) : (
-                                    "Not verified"
-                                )}
-                            </span>
-                        </div>
-
-                        <p className="text-xs text-muted-foreground">
-                            Email changes are not available yet.
-                        </p>
-                    </div>
-                </div>
-
                 <div className="grid gap-4 pt-7 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
                     <div className="flex flex-wrap items-center justify-between gap-4 sm:col-start-2">
                         <div aria-live="polite" className="text-sm">
@@ -441,7 +401,7 @@ export default function ProfileEditor({
                         <Button
                             type="submit"
                             disabled={!isDirty || isSubmitting}
-                            className="ml-auto h-10 px-5"
+                            className="ml-auto"
                         >
                             {isSubmitting && (
                                 <LoaderCircle className="size-4 animate-spin" />

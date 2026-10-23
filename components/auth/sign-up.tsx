@@ -34,7 +34,7 @@ const signupSchema = z.object({
     password: z
         .string()
         .min(8, "Password must be at least 8 characters.")
-        .max(16, "Password cannot exceed 16 characters."),
+        .max(128, "Password cannot exceed 128 characters."),
 });
 
 type SignupData = z.infer<typeof signupSchema>;
