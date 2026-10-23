@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Newsreader } from "next/font/google";
 
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers";
+import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/ui/utils";
 
 const uiFont = DM_Sans({
@@ -32,13 +32,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             suppressHydrationWarning
         >
             <body>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                >
-                    {children}
-                </ThemeProvider>
+                <ThemeProvider>{children}</ThemeProvider>
             </body>
         </html>
     );

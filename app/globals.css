@@ -2,126 +2,218 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark {
+    &:where([data-theme$="-dark"], [data-theme$="-dark"] *) {
+        @slot;
+    }
 
-/* ---------------------------------------
-   Light theme — Porcelain
---------------------------------------- */
+    @media (prefers-color-scheme: dark) {
+        &:where([data-theme$="-system"], [data-theme$="-system"] *) {
+            @slot;
+        }
+    }
+}
 
 :root {
     color-scheme: light;
-
-    --background: #faf8f5;
-    --foreground: #292629;
-
-    --card: #fffefb;
-    --card-foreground: #292629;
-
-    --popover: #fffefb;
-    --popover-foreground: #292629;
-
-    --primary: #66434f;
-    --primary-foreground: #fffbf8;
-
-    --secondary: #eee9e4;
-    --secondary-foreground: #42373b;
-
-    --muted: #f2eeea;
-    --muted-foreground: #716a6c;
-
-    --accent: #f1e5e7;
-    --accent-foreground: #603e4a;
-
-    --destructive: #b84343;
-
-    --border: #e7e0da;
-    --input: #d8cec9;
-    --ring: #815b68;
-
-    --sidebar: #f5f1ec;
-    --sidebar-foreground: #292629;
-    --sidebar-primary: #66434f;
-    --sidebar-primary-foreground: #fffbf8;
-    --sidebar-accent: #ede5e2;
-    --sidebar-accent-foreground: #603e4a;
-    --sidebar-border: #e4ddd7;
-    --sidebar-ring: #815b68;
-
-    --chart-1: #66434f;
-    --chart-2: #a18463;
-    --chart-3: #888b85;
-    --chart-4: #a27c88;
-    --chart-5: #baa7a0;
-
-    /* Additional design tokens */
-    --ornament: #8a6948;
-    --selection: #e8cdd5;
-
-    --surface-shadow:
-        0 1px 2px rgb(33 22 29 / 0.025), 0 12px 36px rgb(33 22 29 / 0.045);
 }
 
-/* ---------------------------------------
-   Dark theme — Midnight
---------------------------------------- */
-
-.dark {
+:root[data-theme$="-dark"] {
     color-scheme: dark;
+}
 
-    --background: #17181e;
-    --foreground: #f4f0ec;
-
-    --card: #22232b;
-    --card-foreground: #f4f0ec;
-
-    --popover: #292a33;
-    --popover-foreground: #f4f0ec;
-
-    --primary: #d6b5bf;
-    --primary-foreground: #261b22;
-
-    --secondary: #303039;
-    --secondary-foreground: #ebe2e4;
-
-    --muted: #2b2c35;
-    --muted-foreground: #b4acb1;
-
-    --accent: #3c303b;
-    --accent-foreground: #f5e2e7;
-
-    --destructive: #f18e90;
-
-    --border: #393841;
-    --input: #54505a;
-    --ring: #d6b5bf;
-
-    --sidebar: #1c1d25;
-    --sidebar-foreground: #f4f0ec;
-    --sidebar-primary: #d6b5bf;
-    --sidebar-primary-foreground: #261b22;
-    --sidebar-accent: #35303a;
-    --sidebar-accent-foreground: #f5e2e7;
-    --sidebar-border: #393841;
-    --sidebar-ring: #d6b5bf;
-
-    --chart-1: #d6b5bf;
-    --chart-2: #c6a985;
-    --chart-3: #a1aaa0;
-    --chart-4: #aa8c9a;
-    --chart-5: #817683;
-
-    --ornament: #c6a985;
-    --selection: #614451;
-
-    --surface-shadow: 0 1px 3px rgb(0 0 0 / 0.1), 0 16px 44px rgb(0 0 0 / 0.12);
+:root[data-theme$="-system"] {
+    color-scheme: light dark;
 }
 
 /* ---------------------------------------
-   Global layout and scale
+   Burgundy — Porcelain / Midnight
 --------------------------------------- */
 
 :root {
-    --radius: 0.75rem;
+    --background: light-dark(#faf8f5, #17181e);
+    --foreground: light-dark(#292629, #f4f0ec);
+
+    --card: light-dark(#fffefb, #22232b);
+    --card-foreground: var(--foreground);
+
+    --popover: light-dark(#fffefb, #292a33);
+    --popover-foreground: var(--foreground);
+
+    --primary: light-dark(#66434f, #d6b5bf);
+    --primary-foreground: light-dark(#fffbf8, #261b22);
+
+    --secondary: light-dark(#eee9e4, #303039);
+    --secondary-foreground: light-dark(#42373b, #ebe2e4);
+
+    --muted: light-dark(#f2eeea, #2b2c35);
+    --muted-foreground: light-dark(#716a6c, #b4acb1);
+
+    --accent: light-dark(#f1e5e7, #3c303b);
+    --accent-foreground: light-dark(#603e4a, #f5e2e7);
+
+    --destructive: light-dark(#b84343, #f18e90);
+
+    --border: light-dark(#e7e0da, #393841);
+    --input: light-dark(#d8cec9, #54505a);
+    --ring: light-dark(#815b68, #d6b5bf);
+
+    --sidebar: light-dark(#f5f1ec, #1c1d25);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: light-dark(#ede5e2, #35303a);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: light-dark(#e4ddd7, #393841);
+    --sidebar-ring: var(--ring);
+
+    --chart-1: light-dark(#66434f, #d6b5bf);
+    --chart-2: light-dark(#a18463, #c6a985);
+    --chart-3: light-dark(#888b85, #a1aaa0);
+    --chart-4: light-dark(#a27c88, #aa8c9a);
+    --chart-5: light-dark(#baa7a0, #817683);
+
+    --ornament: light-dark(#8a6948, #c6a985);
+    --selection: light-dark(#e8cdd5, #614451);
+
+    --surface-shadow:
+        0 1px 2px light-dark(rgb(33 22 29 / 0.025), rgb(0 0 0 / 0.1)),
+        0 12px 36px light-dark(rgb(33 22 29 / 0.045), rgb(0 0 0 / 0.12));
+
+    --auth-art-image: url("/burgundy-auth-background.jpg");
+    --auth-art-overlay: linear-gradient(
+        90deg,
+        rgb(23 24 30 / 0.05),
+        rgb(23 24 30 / 0.16)
+    );
+}
+
+/* ---------------------------------------
+   Verdant — Canopy / Deepwater
+--------------------------------------- */
+
+:root[data-theme^="verdant-"] {
+    --background: light-dark(#f4f8f5, #111d1b);
+    --foreground: light-dark(#20342e, #eaf3ed);
+
+    --card: light-dark(#fcfdf9, #1a2b27);
+    --card-foreground: var(--foreground);
+
+    --popover: light-dark(#ffffff, #223630);
+    --popover-foreground: var(--foreground);
+
+    --primary: light-dark(#1e675b, #91d7c4);
+    --primary-foreground: light-dark(#fcfffb, #102a23);
+
+    --secondary: light-dark(#e6eee9, #293e36);
+    --secondary-foreground: light-dark(#28463c, #e5f3eb);
+
+    --muted: light-dark(#edf3ef, #23372f);
+    --muted-foreground: light-dark(#5b7067, #a8c2b5);
+
+    --accent: light-dark(#dbeee7, #2a5146);
+    --accent-foreground: light-dark(#1f554c, #d3f0e2);
+
+    --destructive: light-dark(#b34646, #ef9995);
+
+    --border: light-dark(#d5e2d9, #354e45);
+    --input: light-dark(#b9cec3, #4e665c);
+    --ring: light-dark(#317c70, #91d7c4);
+
+    --sidebar: light-dark(#edf3ed, #152521);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: light-dark(#deebe2, #294239);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+
+    --chart-1: light-dark(#1e675b, #91d7c4);
+    --chart-2: light-dark(#649a80, #70b99b);
+    --chart-3: light-dark(#719da2, #7bbdc0);
+    --chart-4: light-dark(#9b9b70, #b7c79b);
+    --chart-5: light-dark(#b4c3a1, #849b8d);
+
+    --ornament: light-dark(#688e5c, #b7c79b);
+    --selection: light-dark(#bfe7d7, #32564c);
+
+    --surface-shadow:
+        0 1px 2px light-dark(rgb(15 45 32 / 0.025), rgb(0 0 0 / 0.1)),
+        0 12px 36px light-dark(rgb(15 45 32 / 0.045), rgb(0 0 0 / 0.14));
+
+    --auth-art-image: url("/green-auth-background.jpg");
+    --auth-art-overlay: linear-gradient(
+        90deg,
+        rgb(9 27 24 / 0.05),
+        rgb(9 27 24 / 0.2)
+    );
+}
+
+/* ---------------------------------------
+   Cerulean — Summer Sky / Coastal Dusk
+--------------------------------------- */
+
+:root[data-theme^="cerulean-"] {
+    --background: light-dark(#f5f8fb, #111c2a);
+    --foreground: light-dark(#25354a, #e8f0f8);
+
+    --card: light-dark(#fdfefe, #1c2b3b);
+    --card-foreground: var(--foreground);
+
+    --popover: light-dark(#ffffff, #24364a);
+    --popover-foreground: var(--foreground);
+
+    --primary: light-dark(#32649b, #a0c7f1);
+    --primary-foreground: light-dark(#fdfefe, #102236);
+
+    --secondary: light-dark(#e8eef5, #2b3d50);
+    --secondary-foreground: light-dark(#324d69, #e4edf7);
+
+    --muted: light-dark(#edf2f7, #243447);
+    --muted-foreground: light-dark(#5d6f83, #a9bfd4);
+
+    --accent: light-dark(#f5e8df, #493b3d);
+    --accent-foreground: light-dark(#7f4e3b, #f5d7c5);
+
+    --destructive: light-dark(#b7434b, #ff9695);
+
+    --border: light-dark(#dce5ee, #35485d);
+    --input: light-dark(#bdcbda, #526980);
+    --ring: light-dark(#4676ad, #9ec7f2);
+
+    --sidebar: light-dark(#eef3f8, #172536);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: light-dark(#e1ebf5, #29435b);
+    --sidebar-accent-foreground: light-dark(#315f94, #d6e9ff);
+    --sidebar-border: light-dark(#dce5ee, #35485d);
+    --sidebar-ring: var(--ring);
+
+    --chart-1: light-dark(#32649b, #a0c7f1);
+    --chart-2: light-dark(#d18b62, #e8ac87);
+    --chart-3: light-dark(#3c919d, #75c2cf);
+    --chart-4: light-dark(#7387a0, #a2b1c9);
+    --chart-5: light-dark(#89a99c, #9ccab7);
+
+    --ornament: light-dark(#c58c69, #eeb28b);
+    --selection: light-dark(#d3e6fa, #335674);
+
+    --surface-shadow:
+        0 1px 2px light-dark(rgb(25 48 78 / 0.03), rgb(0 0 0 / 0.12)),
+        0 12px 36px light-dark(rgb(25 48 78 / 0.05), rgb(0 0 0 / 0.18));
+
+    --auth-art-image: url("/cerulean-auth-background.jpg");
+    --auth-art-overlay: linear-gradient(
+        90deg,
+        rgb(17 35 59 / 0.04),
+        rgb(17 35 59 / 0.17)
+    );
+}
+
+:root {
+    --radius: 0.875rem;
 
     --content-width: 80rem;
     --page-gutter: clamp(1.25rem, 4vw, 4.25rem);
@@ -130,10 +222,6 @@
 
     --control-height: 3rem;
 }
-
-/* ---------------------------------------
-   Tailwind / shadcn integration
---------------------------------------- */
 
 @theme inline {
     --font-sans: var(--font-ui);
@@ -243,6 +331,7 @@
         }
     }
 }
+
 @layer components {
     .site-container {
         width: min(calc(100% - 2 * var(--page-gutter)), var(--content-width));
@@ -296,9 +385,7 @@
     /* Authentication artwork */
 
     .auth-art {
-        background-image:
-            linear-gradient(90deg, rgb(23 24 30 / 0.05), rgb(23 24 30 / 0.16)),
-            url("/auth-background.jpg");
+        background-image: var(--auth-art-overlay), var(--auth-art-image);
         background-size: cover;
         background-position: center;
     }
