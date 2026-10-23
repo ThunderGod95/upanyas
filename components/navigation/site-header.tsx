@@ -42,7 +42,7 @@ export default function SiteHeader() {
                 <div className="flex-1" />
 
                 <search>
-                    <form action="/search">
+                    <form method="GET" action="/series?query=">
                         <InputGroup className="hidden h-8 w-[clamp(13rem,20vw,18rem)] xl:flex">
                             <InputGroupInput
                                 type="search"

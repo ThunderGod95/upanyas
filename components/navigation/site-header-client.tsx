@@ -13,7 +13,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/shadcn/avatar";
 import { Button } from "@/components/shadcn/button";
 import {
     DropdownMenu,
@@ -26,7 +30,12 @@ import {
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/ui/utils";
 
-const links: { label: string; href: string }[] = [];
+const links: { label: string; href: string }[] = [
+    {
+        label: "Discovery",
+        href: "/series",
+    },
+];
 
 function isActive(pathname: string, href: string) {
     return pathname === href || pathname.startsWith(`${href}/`);
@@ -158,10 +167,10 @@ export function AccountMenu({
         setError("");
 
         try {
-            const { error } = await authClient.signOut();
+            const { error: authError } = await authClient.signOut();
 
-            if (error) {
-                setError(error.message ?? "Unable to sign out.");
+            if (authError) {
+                setError(authError.message ?? "Unable to sign out.");
                 return;
             }
 
