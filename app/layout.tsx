@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { DM_Sans, Newsreader } from "next/font/google";
 
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import SWRProvider from "@/components/swr-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils/ui";
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
         "Read light novel, web novel, korean novel and chinese novel online for free. You can find hundreds of english translated light novel, web novel, korean novel and chinese novel which are daily updated!",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html
             lang="en"
@@ -33,9 +35,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             suppressHydrationWarning
         >
             <body>
-                <ThemeProvider>
-                    <SWRProvider>{children}</SWRProvider>
-                </ThemeProvider>
+                <NuqsAdapter>
+                    <ThemeProvider>
+                        <SWRProvider>{children}</SWRProvider>
+                    </ThemeProvider>
+                </NuqsAdapter>
             </body>
         </html>
     );
