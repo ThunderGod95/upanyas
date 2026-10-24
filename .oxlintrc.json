@@ -37,6 +37,7 @@
             {
                 "allow": ["server-only", "client-only", "**/*.css"]
             }
-        ]
+        ],
+        "no-unused-vars": "warn"
     }
 }
