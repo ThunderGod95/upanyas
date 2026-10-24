@@ -9,7 +9,7 @@ import {
     getPublishedChapters,
     getPublishedVolumes,
     getVisibleSeries,
-} from "@/lib/series/queries";
+} from "@/lib/series/discovery";
 
 type Props = PageProps<"/series/[slug]">;
 
