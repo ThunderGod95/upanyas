@@ -18,7 +18,7 @@ import {
 
 export default function SiteHeader() {
     return (
-        <header className="site-header sticky top-0 z-50">
+        <header className="site-header dark sticky top-0 z-50 border-b border-border bg-background/75 backdrop-blur-xl backdrop-saturate-150">
             <a
                 href="#main-content"
                 className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2"

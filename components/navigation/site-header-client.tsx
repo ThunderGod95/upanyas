@@ -28,7 +28,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 import { authClient } from "@/lib/auth/client";
-import { cn } from "@/lib/ui/utils";
+import { cn } from "@/lib/utils/ui";
 
 const links: { label: string; href: string }[] = [
     {
