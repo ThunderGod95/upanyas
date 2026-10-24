@@ -11,7 +11,7 @@ import {
     CarouselItem,
     type CarouselApi,
 } from "@/components/shadcn/carousel";
-import { cn } from "@/lib/ui/utils";
+import { cn } from "@/lib/utils/ui";
 
 export interface FeaturedNovel {
     id: string;

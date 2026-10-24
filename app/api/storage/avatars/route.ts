@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import sharp from "sharp";
 
-import { apiError, validOrigin } from "@/lib/apiUtils";
+import { apiError, validOrigin } from "@/lib/utils/api";
 import { authServer } from "@/lib/auth/server";
 import { prisma } from "@/lib/prisma";
 import {
