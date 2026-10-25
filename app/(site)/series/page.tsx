@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
-import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { Suspense } from "react";
 
+import { FilterSidebar } from "@/components/series/discovery/filters-sidebar";
 import {
-    FilterSidebar,
     FiltersState,
     FilterStateChip,
-} from "@/components/series/discovery/filters";
+} from "@/components/series/discovery/filters-state";
 import { SeriesCard } from "@/components/series/discovery/series-card";
+import { SeriesPagination } from "@/components/series/discovery/series-pagination";
 import { DiscoverySkeleton } from "@/components/series/discovery/skeleton";
 import { SortControl } from "@/components/series/discovery/sort-control";
 import {
@@ -193,13 +193,6 @@ async function DiscoveryResults({
         }),
     }));
 
-    function pageHref(page: number) {
-        return serializeDiscoveryParams("/series#catalogue", {
-            ...filters,
-            page,
-        });
-    }
-
     const totalPages = Math.ceil(total / SERIES_PAGE_SIZE);
     const first = (filters.page - 1) * SERIES_PAGE_SIZE + 1;
     const last = Math.min(filters.page * SERIES_PAGE_SIZE, total);
@@ -224,9 +217,9 @@ async function DiscoveryResults({
                 </aside>
 
                 <div className="min-w-0">
-                    <div className="mb-4 flex items-baseline justify-between gap-4 border-b border-border pb-4">
+                    <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4">
                         <h2
-                            id="catalog-title"
+                            id="catalogue-title"
                             className="font-heading text-2xl"
                         >
                             Stories
@@ -240,7 +233,7 @@ async function DiscoveryResults({
                     </div>
 
                     {items.length > 0 ? (
-                        <div className="divie-y space-y-4 divide-border">
+                        <div className="divide-y divide-border">
                             {items.map((series) => (
                                 <SeriesCard key={series.id} series={series} />
                             ))}
@@ -259,42 +252,10 @@ async function DiscoveryResults({
                         </Empty>
                     )}
 
-                    {totalPages > 1 && (
-                        <nav
-                            aria-label="series pagination"
-                            className="mt-8 flex items-center justify-between border-t border-border pt-6"
-                        >
-                            {filters.page > 1 ? (
-                                <Link
-                                    href={pageHref(filters.page - 1)}
-                                    scroll={false}
-                                    className="inline-flex items-center gap-2 text-sm hover:text-primary"
-                                >
-                                    <ArrowLeft className="size-4" />
-                                    Previous
-                                </Link>
-                            ) : (
-                                <span />
-                            )}
-
-                            <span className="text-xs text-muted-foreground tabular-nums">
-                                {filters.page} / {totalPages}
-                            </span>
-
-                            {filters.page < totalPages ? (
-                                <Link
-                                    href={pageHref(filters.page + 1)}
-                                    scroll={false}
-                                    className="inline-flex items-center gap-2 text-sm hover:text-primary"
-                                >
-                                    Next
-                                    <ArrowRight className="size-4" />
-                                </Link>
-                            ) : (
-                                <span />
-                            )}
-                        </nav>
-                    )}
+                    <SeriesPagination
+                        filters={filters}
+                        totalPages={totalPages}
+                    />
                 </div>
 
                 <aside
