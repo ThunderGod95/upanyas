@@ -2,7 +2,7 @@
 
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useQueryStates } from "nuqs";
 import { useState, useTransition, type SubmitEvent } from "react";
 
 import {
@@ -24,8 +24,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/shadcn/select";
-import type { DiscoveryFilters } from "@/lib/series/discovery";
-import { LANGUAGE_OPTIONS, STATUS_OPTIONS } from "@/lib/series/pretty";
+import {
+    LANGUAGE_OPTIONS,
+    STATUS_OPTIONS,
+} from "@/lib/series/discovery/pretty";
+import type { DiscoveryFilters } from "@/lib/series/discovery/search-functions";
+import {
+    discoveryParsers,
+    discoveryUrlKeys,
+} from "@/lib/series/discovery/search-params";
 
 type Facet = { name: string; slug: string };
 
@@ -75,35 +82,55 @@ export function FilterSidebar({
     tags: Facet[];
     resetHref: string;
 }) {
-    const router = useRouter();
     const [expanded, setExpanded] = useState(false);
     const [pending, startTransition] = useTransition();
+
+    const [, setQuery] = useQueryStates(discoveryParsers, {
+        urlKeys: discoveryUrlKeys,
+        shallow: false,
+        history: "push",
+        scroll: false,
+        startTransition,
+    });
 
     function apply(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const params = new URLSearchParams();
+        const data = new FormData(event.currentTarget);
 
-        for (const [key, value] of new FormData(event.currentTarget)) {
-            if (typeof value !== "string") continue;
+        const get = (name: string) => {
+            const value = data.get(name);
+            return typeof value === "string" ? value.trim() : "";
+        };
 
-            const normalized = value.trim();
+        const getAll = (name: string) =>
+            data
+                .getAll(name)
+                .filter((value): value is string => typeof value === "string");
 
-            if (normalized && normalized !== ANY_VALUE) {
-                params.append(key, normalized);
-            }
-        }
+        void setQuery({
+            page: 1,
 
-        if (filters.sort !== "recent") {
-            params.set("sort", filters.sort);
-        }
+            q: get("q"),
+            author: get("author"),
+            translator: get("translator"),
 
-        const query = params.toString();
+            genres: discoveryParsers.genres.parse(getAll("genre")) ?? [],
+            tags: discoveryParsers.tags.parse(getAll("tag")) ?? [],
 
-        startTransition(() => {
-            router.push(`/series${query ? `?${query}` : ""}#catalogue`, {
-                scroll: false,
-            });
+            language: discoveryParsers.language.parse(get("language")),
+
+            originalLanguage: discoveryParsers.originalLanguage.parse(
+                get("originalLanguage"),
+            ),
+
+            originalStatus: discoveryParsers.originalStatus.parse(
+                get("originalStatus"),
+            ),
+
+            translationStatus: discoveryParsers.translationStatus.parse(
+                get("translationStatus"),
+            ),
         });
 
         setExpanded(false);
@@ -301,10 +328,9 @@ export function FilterSidebar({
 }
 
 export interface FilterStateChip {
-    key: string;
+    key: Exclude<keyof DiscoveryFilters, "page" | "sort">;
     value: string;
     label: string;
-    multi?: boolean;
 }
 
 export function FiltersState({

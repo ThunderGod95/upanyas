@@ -9,7 +9,7 @@ import {
     getPublishedChapters,
     getPublishedVolumes,
     getVisibleSeries,
-} from "@/lib/series/discovery";
+} from "@/lib/series/discovery/search-functions";
 
 type Props = PageProps<"/series/[slug]">;
 

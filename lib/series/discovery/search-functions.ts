@@ -5,23 +5,12 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/client";
 
 import { LANGUAGE_OPTIONS, SORT_OPTIONS, STATUS_OPTIONS } from "./pretty";
+import type { DiscoveryFilters } from "./search-params";
+
+export type { DiscoveryFilters } from "./search-params";
 
 export const SERIES_PAGE_SIZE = 24;
 export const CHAPTER_PAGE_SIZE = 50;
-
-export type DiscoveryFilters = {
-    page: number;
-    q: string;
-    author: string;
-    translator: string;
-    genres: string[];
-    tags: string[];
-    language?: DiscoveryLanguage;
-    originalLanguage?: DiscoveryLanguage;
-    originalStatus?: DiscoveryStatus;
-    translationStatus?: DiscoveryStatus;
-    sort: DiscoverySort;
-};
 
 const publishedChapter = {
     archivedAt: null,

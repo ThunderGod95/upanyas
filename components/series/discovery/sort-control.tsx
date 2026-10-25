@@ -8,8 +8,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
-import type { DiscoveryFilters } from "@/lib/series/discovery";
-import { SORT_OPTIONS } from "@/lib/series/pretty";
+import type { DiscoveryFilters } from "@/lib/series/discovery/search-functions";
+import { SORT_OPTIONS } from "@/lib/series/discovery/pretty";
 
 export function SortControl({
     value,

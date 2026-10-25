@@ -19,17 +19,19 @@ import {
     EmptyTitle,
 } from "@/components/shadcn/empty";
 import {
-    DiscoveryFilters,
-    getDiscoverableSeries,
-    getDiscoveryFacets,
-    SERIES_PAGE_SIZE,
-} from "@/lib/series/discovery";
-import {
     LANGUAGE_OPTIONS,
     SORT_OPTIONS,
     STATUS_OPTIONS,
-} from "@/lib/series/pretty";
-import { multiple, single } from "@/lib/utils/misc";
+} from "@/lib/series/discovery/pretty";
+import {
+    getDiscoverableSeries,
+    getDiscoveryFacets,
+    SERIES_PAGE_SIZE,
+} from "@/lib/series/discovery/search-functions";
+import {
+    loadDiscoveryParams,
+    serializeDiscoveryParams,
+} from "@/lib/series/discovery/search-params";
 
 export const metadata: Metadata = {
     title: "Discover Series | Upanyas",
@@ -37,46 +39,6 @@ export const metadata: Metadata = {
 };
 
 type SearchParams = PageProps<"/series">["searchParams"];
-type RawParams = Awaited<SearchParams>;
-
-function parseFilters(params: RawParams): DiscoveryFilters {
-    const requestedPage = Number(single(params.page));
-
-    return {
-        page:
-            Number.isSafeInteger(requestedPage) &&
-            requestedPage > 0 &&
-            requestedPage <= 1000
-                ? requestedPage
-                : 1,
-        q: single(params.q),
-        author: single(params.author),
-        translator: single(params.translator),
-        genres: multiple(params.genre),
-        tags: multiple(params.tag),
-        language: LANGUAGE_OPTIONS.find(
-            (item) => item.value === single(params.language),
-        )?.value,
-        originalLanguage: LANGUAGE_OPTIONS.find(
-            (item) => item.value === single(params.originalLanguage),
-        )?.value,
-        originalStatus: STATUS_OPTIONS.find(
-            (item) => item.value === single(params.originalStatus),
-        )?.value,
-        translationStatus: STATUS_OPTIONS.find(
-            (item) => item.value === single(params.translationStatus),
-        )?.value,
-        sort:
-            SORT_OPTIONS.find((item) => item.value === single(params.sort))
-                ?.value ?? "recent",
-    };
-}
-
-function catalogueHref(params: URLSearchParams) {
-    const query = params.toString();
-
-    return `/series${query ? `?${query}` : ""}#catalogue`;
-}
 
 export default function SeriesDiscoveryPage({
     searchParams,
@@ -112,40 +74,12 @@ async function DiscoveryResults({
 }: {
     searchParams: SearchParams;
 }) {
-    const filters = parseFilters(await searchParams);
+    const filters = await loadDiscoveryParams(searchParams);
 
     const [{ items, total }, { genres, tags }] = await Promise.all([
         getDiscoverableSeries(filters),
         getDiscoveryFacets(),
     ]);
-
-    const base = new URLSearchParams();
-
-    const scalarFilters = {
-        q: filters.q,
-        author: filters.author,
-        translator: filters.translator,
-        language: filters.language,
-        originalLanguage: filters.originalLanguage,
-        originalStatus: filters.originalStatus,
-        translationStatus: filters.translationStatus,
-    };
-
-    for (const [key, value] of Object.entries(scalarFilters)) {
-        if (value) base.set(key, value);
-    }
-
-    for (const genre of filters.genres) {
-        base.append("genre", genre);
-    }
-
-    for (const tag of filters.tags) {
-        base.append("tag", tag);
-    }
-
-    if (filters.sort !== "recent") {
-        base.set("sort", filters.sort);
-    }
 
     const chips: FilterStateChip[] = [];
 
@@ -175,19 +109,17 @@ async function DiscoveryResults({
 
     for (const slug of filters.genres) {
         chips.push({
-            key: "genre",
+            key: "genres",
             value: slug,
             label: genres.find((g) => g.slug === slug)?.name ?? slug,
-            multi: true,
         });
     }
 
     for (const slug of filters.tags) {
         chips.push({
-            key: "tag",
+            key: "tags",
             value: slug,
             label: tags.find((t) => t.slug === slug)?.name ?? slug,
-            multi: true,
         });
     }
 
@@ -220,23 +152,27 @@ async function DiscoveryResults({
         });
     }
 
-    function removeFilter(chip: (typeof chips)[number]) {
-        const next = new URLSearchParams(base);
+    function removeFilter(chip: FilterStateChip) {
+        const next = { ...filters, page: 1 };
 
-        if (chip.multi) {
-            const remaining = next
-                .getAll(chip.key)
-                .filter((value) => value !== chip.value);
-
-            next.delete(chip.key);
-            for (const value of remaining) {
-                next.append(chip.key, value);
-            }
-        } else {
-            next.delete(chip.key);
+        if (chip.key === "genres") {
+            return serializeDiscoveryParams("/series#catalogue", {
+                ...next,
+                genres: filters.genres.filter((value) => value !== chip.value),
+            });
         }
 
-        return catalogueHref(next);
+        if (chip.key === "tags") {
+            return serializeDiscoveryParams("/series#catalogue", {
+                ...next,
+                tags: filters.tags.filter((value) => value !== chip.value),
+            });
+        }
+
+        return serializeDiscoveryParams("/series#catalogue", {
+            ...next,
+            [chip.key]: null,
+        });
     }
 
     const linkedChips = chips.map((chip) => ({
@@ -244,33 +180,24 @@ async function DiscoveryResults({
         href: removeFilter(chip),
     }));
 
-    const resetParams = new URLSearchParams();
-
-    if (filters.sort !== "recent") {
-        resetParams.set("sort", filters.sort);
-    }
-
-    const resetHref = catalogueHref(resetParams);
-
-    const sortLinks = SORT_OPTIONS.map((option) => {
-        const next = new URLSearchParams(base);
-
-        if (option.value === "recent") {
-            next.delete("sort");
-        } else {
-            next.set("sort", option.value);
-        }
-
-        return {
-            value: option.value,
-            href: catalogueHref(next),
-        };
+    const resetHref = serializeDiscoveryParams("/series#catalogue", {
+        sort: filters.sort,
     });
 
+    const sortLinks = SORT_OPTIONS.map((option) => ({
+        value: option.value,
+        href: serializeDiscoveryParams("/series#catalogue", {
+            ...filters,
+            page: 1,
+            sort: option.value,
+        }),
+    }));
+
     function pageHref(page: number) {
-        const next = new URLSearchParams(base);
-        next.set("page", String(page));
-        return catalogueHref(next);
+        return serializeDiscoveryParams("/series#catalogue", {
+            ...filters,
+            page,
+        });
     }
 
     const totalPages = Math.ceil(total / SERIES_PAGE_SIZE);
@@ -288,7 +215,7 @@ async function DiscoveryResults({
             <div className="mt-8 grid items-start gap-x-8 gap-y-8 lg:grid-cols-[13rem_minmax(0,1fr)] xl:grid-cols-[13rem_minmax(0,1fr)_14.5rem]">
                 <aside className="min-w-0 lg:border-r lg:border-border lg:pr-6">
                     <FilterSidebar
-                        key={base.toString()}
+                        key={serializeDiscoveryParams(filters)}
                         filters={filters}
                         genres={genres}
                         tags={tags}

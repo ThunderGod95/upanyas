@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Card, CardContent } from "@/components/shadcn/card";
-import { DiscoverySeries } from "@/lib/series/discovery";
-import { LANGUAGE_OPTIONS, STATUS_OPTIONS } from "@/lib/series/pretty";
+import { DiscoverySeries } from "@/lib/series/discovery/search-functions";
+import { LANGUAGE_OPTIONS, STATUS_OPTIONS } from "@/lib/series/discovery/pretty";
 
 export function SeriesCard({ series }: { series: DiscoverySeries }) {
     const href = `/series/${series.slug}`;
